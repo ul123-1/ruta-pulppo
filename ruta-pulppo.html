@@ -1,0 +1,1140 @@
+<title>Ruta Pulppo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&family=Nunito+Sans:wght@300;400;700&display=swap">
+<style>
+:root{
+  --black:#212322; --white:#FFFFFF; --yellow:#F6BE00; --gray:#B7B7B7; --light:#F3F3F3; --red:#A52003; --green:#529999;
+  --bg:#FFFFFF; --card:#F3F3F3; --text:#212322; --muted:rgba(33,35,34,.68); --line:#B7B7B7; --line-soft:rgba(33,35,34,.12);
+  --btn-bg:#212322; --btn-text:#FFFFFF; --accent:#F6BE00; --ok:#529999; --err:#A52003;
+  --ok-soft:rgba(82,153,153,.14); --err-soft:rgba(165,32,3,.10); --accent-soft:rgba(246,190,0,.16);
+  --overlay:rgba(33,35,34,.7); --logo-filter:none;
+  --display:'Heldane Text','EB Garamond',Georgia,serif;
+  --body:'Nunito Sans',system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#212322; --card:rgba(255,255,255,.06); --text:#FFFFFF; --muted:rgba(255,255,255,.66); --line:rgba(255,255,255,.28); --line-soft:rgba(255,255,255,.12);
+    --btn-bg:#FFFFFF; --btn-text:#212322; --ok-soft:rgba(82,153,153,.22); --err-soft:rgba(165,32,3,.28); --accent-soft:rgba(246,190,0,.14);
+    --overlay:rgba(33,35,34,.85); --logo-filter:invert(1); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#212322; --card:rgba(255,255,255,.06); --text:#FFFFFF; --muted:rgba(255,255,255,.66); --line:rgba(255,255,255,.28); --line-soft:rgba(255,255,255,.12);
+  --btn-bg:#FFFFFF; --btn-text:#212322; --ok-soft:rgba(82,153,153,.22); --err-soft:rgba(165,32,3,.28); --accent-soft:rgba(246,190,0,.14);
+  --overlay:rgba(33,35,34,.85); --logo-filter:invert(1); color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--text);font:400 16px/1.4 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:20px 64px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.2;margin:0;text-wrap:balance}
+h1{font-size:37px} h2{font-size:27px} h3{font-size:20px}
+p{margin:0}
+.tag{font:700 12px/1.2 var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.muted{color:var(--muted)}
+.cap{font-weight:300;font-size:13px;color:var(--muted)}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.accent-line{width:48px;height:2px;background:var(--accent)}
+
+/* Header */
+header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:16px}
+.brand{display:flex;flex-direction:column;gap:6px}
+.logo{width:40px;height:40px;filter:var(--logo-filter);flex:none}
+.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:0 16px;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);margin-bottom:8px}
+.hud .stat{padding:12px 0;display:flex;flex-direction:column;gap:2px;min-width:0}
+.hud .n{font-family:var(--display);font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s ease}
+.bar.ok > i{background:var(--ok)}
+
+/* Tabs */
+nav.tabs{display:flex;gap:4px;overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--line-soft);margin-bottom:24px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{background:none;border:0;padding:14px 12px 12px;white-space:nowrap;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;display:flex;align-items:center;gap:8px}
+nav.tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent)}
+nav.tabs .dot{min-width:18px;height:18px;border-radius:9px;background:var(--accent);color:#212322;font-size:11px;display:inline-grid;place-items:center;padding:0 5px;letter-spacing:0}
+.view{display:flex;flex-direction:column;gap:24px}
+.section-head{display:flex;flex-direction:column;gap:8px;max-width:62ch}
+
+/* Path */
+.units{display:flex;flex-direction:column;gap:0}
+.track-title{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
+.track-title .line{flex:1;height:1px;background:var(--line-soft)}
+.unit{display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:center;padding:10px 0;position:relative}
+.unit .node{width:64px;height:64px;border-radius:50%;border:2px solid var(--line);background:var(--bg);display:grid;place-items:center;position:relative;z-index:1}
+.unit .node svg{width:26px;height:26px}
+.unit:not(:last-child)::before{content:"";position:absolute;left:32px;top:50%;height:100%;width:2px;background:var(--line-soft)}
+.unit.done .node{background:var(--ok);border-color:var(--ok);color:#fff}
+.unit.current .node{border:4px solid var(--accent);background:var(--accent-soft)}
+.unit.locked .node{opacity:.5}
+.unit .meta{display:flex;flex-direction:column;gap:4px;min-width:0}
+.unit .meta .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.unit button.go{justify-self:start}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 8px;border-radius:3px;background:var(--card);letter-spacing:.02em}
+.pill.ok{background:var(--ok-soft);color:var(--text)}
+.pill.warn{background:var(--accent-soft)}
+.pill.err{background:var(--err-soft)}
+
+.btn{border:0;border-radius:4px;padding:11px 18px;font-weight:700;font-size:15px;background:var(--btn-bg);color:var(--btn-text)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.small{padding:7px 12px;font-size:13px}
+.btn.yellow{background:var(--accent);color:#212322}
+.linkbtn{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;font-weight:700;font-size:14px}
+
+/* Cards / lists */
+.card{background:var(--card);border-radius:4px;padding:20px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.checklist{display:flex;flex-direction:column;border-top:1px solid var(--line-soft)}
+.check{display:grid;grid-template-columns:28px 1fr auto;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.check input{appearance:none;width:24px;height:24px;border:2px solid var(--line);border-radius:4px;margin:0;display:grid;place-items:center;cursor:pointer;background:var(--bg)}
+.check input:checked{background:var(--ok);border-color:var(--ok)}
+.check input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check .t{display:flex;flex-direction:column;gap:3px}
+.check .t b{font-weight:700}
+.check.is-done .t b{text-decoration:line-through;text-decoration-color:var(--muted)}
+.xp{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* Guide */
+.steps{display:flex;flex-direction:column;gap:0;counter-reset:s}
+.step{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line-soft)}
+.step .num{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-size:18px}
+.step.is-done .num{background:var(--ok);border-color:var(--ok);color:#fff}
+.step.next .num{border-color:var(--accent);border-width:3px}
+.step .body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.step .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.where{font-size:13px;font-weight:700;background:var(--card);padding:6px 10px;border-radius:3px;align-self:flex-start}
+
+/* News */
+.news{display:flex;flex-direction:column}
+.newsitem{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid var(--line-soft)}
+.newsitem .rank{font-family:var(--display);font-size:37px;line-height:1;color:var(--muted)}
+.newsitem .body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.why{border-left:2px solid var(--accent);padding-left:12px}
+.explain-out{white-space:pre-wrap;background:var(--card);padding:14px;border-radius:4px;font-size:15px}
+.chat{display:flex;flex-direction:column;gap:12px}
+.msgs{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto}
+.msg{padding:10px 14px;border-radius:4px;max-width:88%;white-space:pre-wrap;font-size:15px}
+.msg.me{align-self:flex-end;background:var(--btn-bg);color:var(--btn-text)}
+.msg.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line-soft)}
+.composer{display:flex;gap:8px}
+.composer input,.field input{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:4px;padding:11px 12px;font:inherit}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;border-radius:16px;padding:6px 12px;font-size:13px}
+
+/* Team */
+.table-wrap{overflow-x:auto;border-top:1px solid var(--line-soft)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+th{font:700 11px/1.2 var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;padding:12px 10px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+td{padding:12px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle;font-variant-numeric:tabular-nums}
+td.num,th.num{text-align:right}
+.who{display:flex;gap:10px;align-items:center}
+.who img{width:28px;height:28px;border-radius:50%}
+.minibar{display:flex;align-items:center;gap:8px}
+.minibar .bar{width:70px}
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.statrow .s{padding:16px 16px 16px 0;display:flex;flex-direction:column;gap:4px}
+.statrow .s + .s{padding-left:16px;border-left:1px solid var(--line-soft)}
+.statrow .n{font-family:var(--display);font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.rank-list{display:flex;flex-direction:column}
+.rank-row{display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.rank-row.me{background:var(--accent-soft);padding-inline:8px;margin-inline:-8px}
+.rank-row .pos{font-family:var(--display);font-size:20px;color:var(--muted)}
+
+/* Lesson overlay */
+.lesson{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.lesson .lhead{display:flex;align-items:center;gap:16px;padding:16px 20px;max-width:760px;width:100%;margin:0 auto}
+.lesson .lhead .bar{flex:1;height:10px;border-radius:5px}
+.iconbtn{background:none;border:0;padding:6px;display:grid;place-items:center}
+.iconbtn svg{width:22px;height:22px}
+.lesson .lbody{flex:1;overflow-y:auto;padding:12px 20px 24px;max-width:760px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.lesson .lfoot{border-top:1px solid var(--line-soft);padding:16px 20px}
+.lesson .lfoot .in{max-width:760px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.lesson .lfoot.ok{background:var(--ok-soft);border-top-color:var(--ok)}
+.lesson .lfoot.err{background:var(--err-soft);border-top-color:var(--err)}
+.fb{display:flex;flex-direction:column;gap:4px;flex:1 1 280px;min-width:0}
+.fb b{font-size:17px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{text-align:left;background:var(--bg);border:2px solid var(--line-soft);border-radius:6px;padding:14px 16px;font-size:16px;display:flex;gap:12px;align-items:center}
+.opt .k{width:26px;height:26px;border-radius:4px;border:1px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none;color:var(--muted)}
+.opt:hover:not(:disabled){border-color:var(--line)}
+.opt.sel{border-color:var(--text)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--err);background:var(--err-soft)}
+.opt:disabled{cursor:default}
+.concept{display:flex;flex-direction:column;gap:14px}
+.concept ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px}
+.result{display:flex;flex-direction:column;gap:20px;align-items:flex-start;padding-top:24px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--btn-bg);color:var(--btn-text);padding:10px 16px;border-radius:4px;font-weight:700;font-size:14px;z-index:80}
+.empty{padding:24px;background:var(--card);border-radius:4px}
+.sync{font-size:12px;color:var(--muted)}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:6px;padding:3px;gap:3px;width:100%;max-width:460px}
+.seg button{border:0;background:none;padding:9px 8px;border-radius:4px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button[aria-selected="true"]{background:var(--btn-bg);color:var(--btn-text)}
+.actions3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.acard{background:var(--card);border:2px solid transparent;border-radius:4px;padding:18px;text-align:left;display:flex;flex-direction:column;gap:6px;color:var(--text)}
+.acard:hover:not(:disabled){border-color:var(--line)}
+.acard:disabled{opacity:.55;cursor:default}
+.acard .ic svg{width:26px;height:26px}
+.simlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:14px;margin-top:10px}
+.badge{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:12px;color:var(--muted)}
+.badge .b{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;border:2px dashed var(--line);flex:none}
+.badge.on{color:var(--text)}
+.badge.on .b{border:2px solid var(--accent);background:var(--accent);color:#212322}
+.badge .b svg{width:24px;height:24px}
+.badge.big{flex-direction:row;gap:14px;font-size:16px;text-align:left}
+.types{display:flex;gap:6px;flex-wrap:wrap}
+.tchip{font-size:11px;padding:2px 8px;border:1px solid var(--line-soft);border-radius:10px;color:var(--muted)}
+.hearts{display:flex;gap:3px;color:var(--err)} .hearts svg{width:22px;height:22px} .hearts .off{color:var(--line-soft)}
+.combo{font-weight:700;font-size:13px;background:var(--accent);color:#212322;padding:3px 9px;border-radius:10px;white-space:nowrap}
+.ord-answer{display:flex;flex-direction:column;gap:8px;min-height:64px;border:2px dashed var(--line-soft);border-radius:6px;padding:10px}
+.ord-row{display:flex;gap:12px;align-items:center;text-align:left;background:var(--bg);border:2px solid var(--line-soft);border-radius:6px;padding:10px 12px;font-size:15px}
+.ord-row .k{width:24px;height:24px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.ord-row.right{border-color:var(--ok);background:var(--ok-soft)} .ord-row.wrong{border-color:var(--err);background:var(--err-soft)}
+.ord-pool{display:flex;flex-wrap:wrap;gap:8px}
+.tok,.mt{background:var(--bg);border:2px solid var(--line-soft);border-radius:6px;padding:10px 12px;font-size:15px;text-align:left;color:var(--text)}
+.tok:hover,.mt:hover:not(:disabled){border-color:var(--line)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{min-height:54px}
+.mt.sel{border-color:var(--text);background:var(--card)}
+.mt.done{border-color:var(--ok);background:var(--ok-soft);opacity:.65;cursor:default}
+.mt.bad{border-color:var(--err);background:var(--err-soft)}
+.calc{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:6px;padding:2px 14px;max-width:380px}
+.calc .u{font-family:var(--display);font-size:24px;color:var(--muted)}
+.calc input{border:0;background:none;font:400 30px/1.2 var(--display);color:var(--text);width:100%;min-width:0;padding:8px 0;outline:none}
+.calc.right{border-color:var(--ok);background:var(--ok-soft)} .calc.wrong{border-color:var(--err);background:var(--err-soft)}
+.msgs.sim{max-height:none;overflow:visible}
+ul.plain{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90}
+@keyframes pop{0%{transform:scale(.96);opacity:.4}100%{transform:scale(1);opacity:1}} .pop{animation:pop .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}} .shake{animation:shake .3s}
+@media (max-width:560px){
+  .match .mt{font-size:14px;padding:9px}
+  .hud{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:30px}
+  .hud .n{font-size:26px}
+  .unit{grid-template-columns:60px 1fr}
+  .unit .node{width:54px;height:54px}
+  .unit:not(:last-child)::before{left:27px}
+  .newsitem{grid-template-columns:1fr}
+  .newsitem .rank{font-size:27px}
+  .statrow .n{font-size:32px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="tag">Pulppo · Onboarding de asesores</span>
+      <h1>Ruta Pulppo</h1>
+      <p class="muted" id="greet">Aprende la plataforma y el oficio en lecciones de 3 minutos.</p>
+    </div>
+    <img class="logo" alt="Pulppo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAKzklEQVR42u2de5CXVRnHP3uBhQVShF1c3OKWCgUqUSEpCyRtIQkiBIEXwsyiC+OlyZysadLKSM0uNmoXYhqHorKEpsxEFHfAvEQk5i7IbYnrruuyCLjs4vbHeVZ//XzPeW/nvO+7i9+ZM8z82Pc8z3nOec95ructIJsoAt4JnAWMBkYCw4AK4DSgL1AC9JC/bwNagSNAE7AP2A7UAi8AdcBu4ETWBlqQIV6GABOAScD7geEibBtokgl5FlgHbAB28jYYDiwB1gCHgI6E2iGhuQQYcbIJvQSYATyYsNBNk/Gg8NSrOwv+HcC1wMYMCF3XNgKfFV67DXoBnwFezLDg89uLsli6/BsxDfhHFxJ8fnsauLgrCr4S+JWofR1dvL0OLBe1uEtgLrCrGwg+v9UD87Is+L7Aj7uh4PPbT4B+WRP+u4EnTwLhd7Ya4MysWMITgV+LJesaTbIV7AYOiOsBoA8wSPbpd1m0oE2oB64Uyzo1zAKaHa+2zcBSoFp8QUU+PqQK+dul8qxrI+6ytIR/OXDM0cBOAKtFBewd0waZBqxyqJEdkzchUSwQ76Or/XWqA54vcnhOtQJXJCX8GcBRB4M4AtwkviJX6Ck0jjh6Ey51LfwPAa84YH4nMDkkLz3k8O2TExcIiknADgfjaAYucKUFDQXWyr828TwwB9ji83flwIWidY2Ww7ZU/u8oKgizWbawGtGSTDgT+AMwxvJ4dgFTZIKtoRR43MGK+U+ACT0PuE8EHLTf/cD98qwJQ1ARM9vjeiJncVjBnQ6Y3C8rWYcysazjnDdHxXItN9B5r/Bie3x32RL+x4F2y8y1+xxYEy27r2uBKgO9mai4sm1VekZc4ZehYqm2V8c9BppzcBMpa5G+dXDhx9rh8/b54l5HGs9ADb1LHKm4uVuSblUOcKQZ3RfHx3PcAUOLNfTGAC8n4Eh7GThHw8PnHNBr89n+PFHsyGrcpnHl9gLWJ+jN3KBxcfQFXnJk3YeyVeY5Gvg3NPSWpOBSvk7Dyy2O6M0P48BykblwDBjlQe80ce0mPQG7NW7rsx2dQ5uCOhZdrf6ngEIPetekGFi51oOfQtmiEnkLCj386Usc+ZGeQAW4810h80kP8z3cMa+L1e8CS+R81aLKod98tge9StLNjmvBO9vhModxjkmmN2CRZpuIixOiXeRjNOlmofXTOONeEmvdNgqBq3UTUC5uBxc4DDRoDry04cVDg/DsAtNR8eu3TEC1wUKNiyO8GUDPRUUGJqAiBL82MAD4qNcEzHI4yDbNK90nAxNQqtky2x3SnJU/AQMk2OEKRZqz5XgGJqDN47cCR2dhJy7o3G06iYyL67XzQW+NEdKYgQlo1BijvR3SLENVAb0xAVWOB9kPONXj9+0ZmIBtHr/1T0A7q8qdgPMdEyvBO3Nus2YLSHL72ezx+xDcZme8IfNC8YckoQ6e5/HbVlQFY1rYKi0Ir7ZxFjCgEFUoV54AwYmaQ3h1ihOwCpVUFYRX2yhHCgSvSMjsb5DDJx8jcZMoFSQ65uWdHQgcTIiHqwoTtEYH5hogOagFVqSw+n+DCvzno1qzUJxZ4Q8kuOrW4p0MNiTBVdchtIZq9P81CfKxAtwkXJnSUSZrVsOVCfKxUMPDJOyn4PglcDnPoc9va9Dn+H8/Afp3GDyVjyYsixcgnYK6hQaXxf0O6f7cMPlXkU5YNNG9t7PtE/XXCz0cnUsrUOnpXhhGuNxTm5phIrk4ugO51OA7+pNFWg/50HosJRk0pzkBHahi7mKD/+gRCzQeNfh1ioBlKY7/FVB59GnX3RYYghc1Mfpejz7IVAD8KOWxH0zrEM5v3zMYKxXAcxH63AgMNvT73QyMux5UhUoWip9vMQhrKKqYI8xtJ8MM/X0tI2PeTIoHkFe73sdsD5Iqv0P8Szpcl6HxPg6qyj0rDJ1A3S1kcmnvMTy/FxhreP6ahC1dv/YAwDczxFCHuKgXGIQ4QfTn/OcaUVWcOszHXW1z1PatTsaSOvH/jaqGDOIqnmkQ5kX8/xUJhzAXdwetbd4qPCZlnF4O8D6HK2M7cLvEP8tF558d8NkW4CMGoV4CvCZths9kBU1/XCA8lklQ5naJGbuqrh+HBMttq6JNqIp0r/Tv2SH6acRc+LygcxUZtqvGEPQWaAL0X5Ex2VZB+3cS+ZvFjv8JnGsQypyQ/e2VtzRKDHpPlC1Bg3Mj2iO69khuVsQGSxGeDajbSTZZjBpVoCraR4V4ZiTqLtDBFvnYJGNbb6m/p/L3SRv1X5UBCM+M2H+twYOa79mMWmM8N0D/ldipI5uav8/tjdFZG/AxA9OnoCpv7pGZj0rn+dx9U7Nfb4rR/9PC4yeFZx2qiVfYvc/rfPxtjA5X+qz4Wkv75r2YL1MtAX5qiVYt5mr+OPL6nVeH82Ksfp0BdDX2rgBYhk95T46L+ReWaLaJ9azTsKKObb7O9Rvl0oqNGsGMtZjvs5JwqYI9Y67Q/IukvLSwYtH4wvZ3wOAijxSP/aGmr5WWBPBn9HUExYa3ohSVdWeDh99raPwgQl8/M62c8yM4qz7t0c8gS5G2tXhnVedGs5YbAu2nWPL2NgGne/S/KEJajslfRaEMOkyn0zUTaaOu2JShlrv67jb8XRl26n4nePR9cYQ8oCK//XNWyE6rNQlOcavKTTbFrR7PfNvw92cA/4rJ02SNOhqmj0B3jPYg3JXzczWWaFQH3xbMnxW5yfDszYbnhqNS4aO6yEfFdKs8a0iLeQsuDdHxzRotJIpBtAt1hZgOX0RVspuumv+S4fn3oO4rimIAemlhXw3RR6giyCKCp+mt0vSxOOQg9yN1UxosCqggtJNXDJ2HcRGSsL6g6Sto7tKaIHt/Pj4ovvYgFyBVaKzSv4TQMkxFEZ8IyEuur93k17kwhJb2V83qPz2gq/s1YHxUj91dAZm8wZDX8xD+V5hNMfAwHXg1ogFlqvyfHGA7Wm0wmm4IyMfdcVym/QP6ceoNKmOxbB81EkZsk/BgHeqG80ofIcW5qbcZ+LCPdrRUeDkqvDULr4sMRl5ZwCBWHRau0p9KsLvjfunTT4EIewzqgw9+F5uOtxSbPYh/FWhv4WmM8Oh3o3AQX9Nxn5BqKNwacLA3WqJ3Dip121b06b8+UbowuD4gzdssBoPoKYdRkLyeL8ekNR4310fuJH499I0BNbGHcVBnXBHCr788YHQs/6xYjJvb2XOzkT9P+NvWOz/L1RFw3x+MI4wNsS/vAb4ue6sJp4qameRHgGpETe3vw9sIVM5q0OB+AyETCKJ8xGeqBLyDfsrpMCqb4BmJG7fI63mG7MvjUR/eSQP1EobcJOdEK6qWYATwATHago7zVfH1/D0JxmeSTnF1VtsR3N63pJ2ElreFz+E0hJ/rjj14Egu/Ae/q/0QxDntZD12p1fk4DxNFZUA7obu0hyOo2c5RAnwH+1+iyFJrQ9WWlZBhTOumW1IdXejjzmWoEtDWbiD4VtTnTcrogphIste/2G6P4f5CQ+coQqU9PtOFBP8cKkG3iG6EEhnUugwL/klU3mYvujEKJdK1LCNG3EHxdE7pbis+qIt7IfBHkr2z4oDQ/JRL17Erb6grDBKrugqVkXE2b1ZWxkG7rPIt4vlch0qSOpCFQRdk+O3ovFdzpLTh4sIeIC7jkpzASpuoiy2odJM9qBLZOlS50jaZhMzhfw/kidKRlkFSAAAAAElFTkSuQmCC">
+  </header>
+
+  <section class="hud" aria-label="Tu progreso">
+    <div class="stat"><span class="tag">Racha</span><span class="n" id="hStreak">0</span><span class="cap" id="hStreakCap">días seguidos</span></div>
+    <div class="stat"><span class="tag">XP total</span><span class="n" id="hXp">0</span><span class="cap" id="hLevel">Nivel 1</span></div>
+    <div class="stat"><span class="tag">Meta de hoy</span><span class="n" id="hGoal">0/30</span><div class="bar" style="margin-top:6px"><i id="hGoalBar"></i></div></div>
+    <div class="stat"><span class="tag">Ruta</span><span class="n" id="hPath">0%</span><span class="cap">lecciones, guía y tareas</span></div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button role="tab" id="tab-learn" aria-selected="true" data-view="learn">Aprender</button>
+    <button role="tab" id="tab-guide" aria-selected="false" data-view="guide">Primeros pasos <span class="dot" id="dGuide" hidden></span></button>
+    <button role="tab" id="tab-tasks" aria-selected="false" data-view="tasks">Tareas <span class="dot" id="dTasks" hidden></span></button>
+    <button role="tab" id="tab-news" aria-selected="false" data-view="news">Noticias</button>
+    <button role="tab" id="tab-team" aria-selected="false" data-view="team">Ranking</button>
+  </nav>
+
+  <main>
+    <section class="view" id="view-learn"></section>
+    <section class="view" id="view-guide" hidden></section>
+    <section class="view" id="view-tasks" hidden></section>
+    <section class="view" id="view-news" hidden></section>
+    <section class="view" id="view-team" hidden></section>
+  </main>
+  <p class="sync" id="sync" style="margin-top:32px">Guardando en este navegador.</p>
+</div>
+
+<div class="lesson" id="lesson" hidden role="dialog" aria-modal="true" aria-label="Lección"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* =========================== CONTENIDO =========================== */
+const ICONS = {
+  info:'<path d="M12 8v.01M11 12h1v5h1"/><circle cx="12" cy="12" r="9"/>',
+  chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+  home:'<path d="M3 11l9-7 9 7M5 10v10h14V10"/>',
+  tag:'<path d="M3 12V4h8l9 9-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  star:'<path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.3L12 17.5 6.5 20.4l1-6.3L3 9.7l6.2-.9z"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>',
+  gauge:'<path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/>',
+  hand:'<path d="M3 13l4-4 4 3 3-3 7 7-4 4H9z"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  folder:'<path d="M3 6h6l2 2h10v11H3z"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .8 3 2-1.3 2-3 2c-1.4 0-2.5-.5-3-1.5M12 6v2M12 16v2"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>',
+  scale:'<path d="M12 4v16M6 20h12M4 8h16M7 8l-3 6a3 3 0 0 0 6 0zM17 8l-3 6a3 3 0 0 0 6 0z"/>',
+  cam:'<path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14-5l-2 2M4 4v4h4M4 13a8 8 0 0 0 14 5l2-2M20 20v-4h-4"/>',
+  heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" fill="currentColor"/>',
+  flame:'<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-3 2-4 2-6 1 1 2 2 2 3 1-2 1-5 1-7z"/>'
+};
+const ico = (k, stroke=1.5) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
+
+const UNITS = [
+ {id:'u1', track:'Plataforma Pulppo', icon:'info', title:'Qué es Pulppo', sub:'Pilares, módulos y permisos',
+  concept:['Pulppo es una proptech: la plataforma donde publicas inventario, recibes y atiendes leads, agendas recorridos, gestionas operaciones y cierras.','Cinco pilares: Tecnología, Comunidad, Consultoría, Marketing y Legal.','Entras en broker.pulppo.com. Módulos: Inicio, Propiedades, Contactos, Búsquedas, Captaciones, Tareas, Inventario, Operaciones, Marketing, Estadísticas, Academia y Legal.','El buscador rápido (la lupa) está en todas las pantallas: busca por dirección, código, nombre o teléfono.'],
+  qs:[
+   {q:'¿Cuáles son los cinco pilares de Pulppo?',o:['Tecnología, Comunidad, Consultoría, Marketing y Legal','Portales, Créditos, Seguros, Notaría y Avalúos','Ventas, Rentas, Remodelación, Mudanzas y Seguros'],a:0,e:'Son los cinco frentes con los que Pulppo acelera a cada inmobiliaria.'},
+   {q:'¿Dónde entras a la plataforma como asesor?',o:['En Mi Pulppo','En broker.pulppo.com','En el portal Únete a Pulppo'],a:1,e:'broker.pulppo.com es tu espacio de trabajo. Mi Pulppo es la vista que ve tu cliente comprador.'},
+   {q:'Necesitas encontrar una propiedad y solo tienes el teléfono del propietario. ¿Qué usas?',o:['El módulo Legal','Estadísticas','El buscador rápido (la lupa)'],a:2,e:'La lupa busca por cualquier dato de la propiedad o del propietario, desde cualquier pantalla.'},
+   {q:'En Búsquedas, Inventario y Operaciones, ¿qué ve un Master Broker?',o:['Lo de todo su equipo, pero nunca lo de otras inmobiliarias','Lo de todas las inmobiliarias de Pulppo','Solo lo propio, igual que un asesor'],a:0,e:'Es intencional: protege a los clientes de cada inmobiliaria.'},
+   {q:'¿Qué es el MLS dentro de Pulppo?',o:['Un portal de pago externo','El inventario compartido de la comunidad','Un tipo de crédito hipotecario'],a:1,e:'MLS (Multiple Listing Service) es el inventario compartido entre la comunidad; abre la puerta a operaciones compartidas.'}
+  ]},
+ {id:'u2', track:'Plataforma Pulppo', icon:'chat', title:'WhatsApp y Google', sub:'Tu canal de leads, sincronizado',
+  concept:['Los leads llegan y se responden por WhatsApp Business vinculado a la plataforma.','La vinculación se hace con un onboarding de Meta (“Login with Facebook”).','La sincronización es bidireccional: lo que escribes en la plataforma aparece en WhatsApp y viceversa.','La bandeja de Conversaciones separa tus contactos en Personal y Comercial.','Algunos bloqueos vienen de restricciones de Meta, no de la plataforma.'],
+  qs:[
+   {q:'¿Cómo se vincula WhatsApp Business a Pulppo?',o:['Con el onboarding de Meta (“Login with Facebook”)','Enviando un correo a soporte','Desde la app de Google Calendar'],a:0,e:'El flujo de vinculación pasa por Meta.'},
+   {q:'Le escribes a un cliente desde la plataforma. ¿Dónde se refleja el mensaje?',o:['Solo en la plataforma','También en tu WhatsApp','En tu correo'],a:1,e:'La sincronización es bidireccional.'},
+   {q:'La bandeja de Conversaciones clasifica a tus contactos en…',o:['Venta y Renta','Nuevos y Antiguos','Personal y Comercial'],a:2,e:'Así separa a tus clientes de tus contactos personales.'},
+   {q:'Verdadero o falso: si Meta restringe tu número, es una falla de Pulppo.',o:['Verdadero','Falso'],a:1,e:'Las restricciones de Meta son ajenas a la plataforma. Repórtalas a tu canal de ayuda para orientarte.'},
+   {q:'¿Por qué el líder revisa quién tiene WhatsApp vinculado?',o:['Porque por ahí llegan tus leads y se mide tu atención','Solo para enviar fotos','Porque es obligatorio para Academia'],a:0,e:'Sin WhatsApp vinculado pierdes leads y tus métricas de respuesta no se registran.'}
+  ]},
+ {id:'u3', track:'Plataforma Pulppo', icon:'home', title:'Captación y publicación', sub:'De la primera llamada al anuncio',
+  concept:['El módulo Captaciones guía el alta por etapas: ¿Por dónde empezar? · Seguimiento · Encuentros · ACM · Acuerdo Comercial.','Cargas la propiedad una sola vez y se envía a los portales (Inmuebles24, Mercado Libre y más).','Si faltan campos obligatorios del acuerdo, como el inicio de comercialización, la plataforma no habilita Publicar.','La zona se escribe y se selecciona de la lista. Si no, la propiedad queda mal geolocalizada.','Una propiedad “activa” es una propiedad en estado publicado.'],
+  qs:[
+   {q:'¿Qué etapa va justo antes de publicar la propiedad?',o:['Encuentros','ACM','Acuerdo Comercial'],a:2,e:'Orden: ¿Por dónde empezar? → Seguimiento → Encuentros → ACM → Acuerdo Comercial → Publicar.'},
+   {q:'El botón Publicar no se habilita. ¿Cuál es la causa más probable?',o:['Faltan campos obligatorios del acuerdo, como el inicio de comercialización','Tienes menos de 30 fotos','No subiste video'],a:0,e:'Completa las condiciones del Acuerdo Comercial y se habilita.'},
+   {q:'Escribes la colonia pero no la seleccionas de la lista desplegable. ¿Qué pasa?',o:['Nada, se guarda igual','Queda mal geolocalizada y llega mal a los portales','Se borra la propiedad'],a:1,e:'Siempre escribe y selecciona. La geolocalización define dónde aparece tu anuncio.'},
+   {q:'¿Qué propiedades cuentan como “activas”?',o:['Las que están en valuación','Las que están en edición','Las que están publicadas'],a:2,e:'Activa = publicada. Valuación, edición, completada y cancelada no cuentan.'},
+   {q:'En Encuentros registras notas de audio. ¿Qué niveles de visibilidad existen?',o:['Privada, Inmobiliaria y Pulppo','Solo Privada','Pública y Privada'],a:0,e:'Además, las notas de audio se transcriben a texto.'}
+  ]},
+ {id:'u4', track:'Plataforma Pulppo', icon:'chart', title:'Valuación con ACM', sub:'Precio que sí se vende',
+  concept:['El ACM (Análisis Comparativo de Mercado) es la opinión de valor que fija el precio de salida.','El semáforo: óptimo (verde), no competitivo (amarillo), fuera de mercado (rojo).','El triángulo de precios compara el precio solicitado por el propietario, el sugerido por el ACM y el precio de salida acordado.','Si faltan campos de superficie, el ACM no corre. Hoy más de la mitad del inventario está sin valuación.'],
+  qs:[
+   {q:'¿Qué significa ACM?',o:['Acuerdo de Comercialización Mensual','Análisis Comparativo de Mercado','Asesor Certificado Master'],a:1,e:'Es la base para negociar el precio con el propietario.'},
+   {q:'El triángulo de precios del ACM compara…',o:['Precio solicitado, precio sugerido y precio de salida','Precio de lista, comisión y regalía','Precio de venta, renta y mantenimiento'],a:0,e:'Te ayuda a llevar al propietario del precio que quiere al precio que vende.'},
+   {q:'Tu propiedad sale en rojo en el ACM. ¿Qué significa?',o:['Precio óptimo','Precio no competitivo','Fuera de mercado (sobrevaluada)'],a:2,e:'Rojo = fuera de mercado. Es la señal para renegociar el precio.'},
+   {q:'El ACM no corre en tu propiedad. ¿Qué revisas primero?',o:['Que la propiedad tenga video','Los campos de superficie','Que el propietario tenga Radar'],a:1,e:'Sin superficies completas no hay $/m² y la valuación no corre.'},
+   {q:'Buena práctica para un ACM sólido:',o:['2 comparables cualesquiera','6 a 10 comparables con superficie similar (±20%)','Solo propiedades vendidas hace más de 5 años'],a:1,e:'Mezcla vendidas, activas y retiradas de superficie parecida.'}
+  ]},
+ {id:'u5', track:'Plataforma Pulppo', icon:'star', title:'Exclusivas y marketing', sub:'Más exposición, mejores cierres',
+  concept:['Exclusiva: solo tu inmobiliaria comercializa la propiedad.','Programa Exclusiva 1-5-10: campañas y marketing reforzado, más un bono al asesor que trae al comprador. Se solicita con un formulario.','La pestaña Marketing de cada propiedad genera piezas automáticas: post largo, post cuadrado, story, video story y video (hasta ~24 h).','La calidad de la publicación se ve como semáforo y genera tareas para mejorarla.'],
+  qs:[
+   {q:'¿Qué es una propiedad en exclusiva?',o:['Una propiedad de más de $10 millones','Una propiedad que solo tu inmobiliaria comercializa','Una propiedad publicada en un solo portal'],a:1,e:'Lo contrario es una propiedad compartida entre varias inmobiliarias o asesores.'},
+   {q:'¿Qué ofrece el programa Exclusiva 1-5-10?',o:['Campañas y marketing reforzado, con bono al asesor que trae al comprador','Descuento en la regalía','Un crédito hipotecario preaprobado'],a:0,e:'Se solicita llenando el formulario del programa.'},
+   {q:'¿Cuánto tarda en generarse el material de la pestaña Marketing?',o:['Una semana','Hasta ~24 horas','Es inmediato siempre'],a:1,e:'Post, story y video se generan automáticamente con un SLA de hasta ~24 h.'},
+   {q:'La calidad de tu publicación sale baja. ¿Qué hace la plataforma?',o:['La despublica','Te genera una tarea con lo que falta para mejorarla','Le avisa al propietario'],a:1,e:'Pasa el cursor sobre el semáforo: te dice qué falta.'},
+   {q:'¿Qué conviene más para convertir un anuncio?',o:['3 fotos verticales','12+ fotos horizontales y luminosas, con título claro','Solo el precio en el título'],a:1,e:'Fórmula de título: tipo + m² o recámaras + diferenciador + ubicación.'}
+  ]},
+ {id:'u6', track:'Plataforma Pulppo', icon:'user', title:'Atención a clientes', sub:'Del “hola, informes” a la visita',
+  concept:['Cuando un cliente da click en un portal, la consulta te llega por WhatsApp y se crea una card de búsqueda.','Objetivo: primera respuesta en menos de 15 minutos.','Califica con cinco preguntas: presupuesto, forma de pago, plazo, motivo y quién decide.','Envía Mi Pulppo: el cliente ve fichas, tus datos y sugerencias (primero tuyas, luego de tu inmobiliaria y al final del MLS).','Lead, consulta y búsqueda no son lo mismo: la búsqueda es el perfil de lo que el cliente quiere.'],
+  qs:[
+   {q:'¿Cuál es el tiempo objetivo de primera respuesta a un lead?',o:['Menos de 15 minutos','Menos de 24 horas','Al día siguiente hábil'],a:0,e:'Responder rápido multiplica la probabilidad de contacto efectivo.'},
+   {q:'¿Cuál de estas NO es una de las cinco preguntas de calificación?',o:['Forma de pago','Quién decide','Signo zodiacal','Plazo de decisión'],a:2,e:'Las cinco: presupuesto, forma de pago, plazo, motivo y quién decide.'},
+   {q:'¿Qué es Mi Pulppo?',o:['Tu perfil de asesor','La vista espejo de la búsqueda que compartes con tu cliente','El chat interno de Pulppo'],a:1,e:'El cliente ve propiedades, tus datos y puede agendar visita.'},
+   {q:'¿En qué orden sugiere propiedades Mi Pulppo?',o:['MLS, inmobiliaria, tuyas','Tuyas, tu inmobiliaria y luego MLS','Al azar'],a:1,e:'Primero tu inventario, luego el de tu inmobiliaria y al final el de la comunidad.'},
+   {q:'Una “búsqueda” en Pulppo es…',o:['Lo mismo que un lead','El perfil de lo que busca el cliente: zonas, presupuesto y tipo','Una visita confirmada'],a:1,e:'Puede nacer de un lead o de carga manual. Cargarla es lo que genera datos de demanda.'}
+  ]},
+ {id:'u7', track:'Plataforma Pulppo', icon:'eye', title:'Visitas, Radar y Tareas', sub:'Seguimiento sin olvidos',
+  concept:['Para registrar una visita, la propiedad debe estar agregada a la búsqueda del cliente.','Al confirmar, el cliente recibe el mapa del recorrido. Una visita confirmada ya no se puede cancelar: solo en estado pendiente.','Unos 25 minutos después de la visita, Pulppo envía al cliente una encuesta (expectativas, ubicación, limpieza y atención del asesor).','Radar: el propietario ve la actividad de su propiedad y los reviews, y puede cargar documentos.','Tareas es tu asistente: te recuerda dar seguimiento a clientes y mejorar propiedades sin actividad.'],
+  qs:[
+   {q:'¿Qué necesitas para registrar una visita?',o:['Que la propiedad esté agregada a la búsqueda del cliente','Que el cliente tenga crédito aprobado','Que la propiedad sea exclusiva'],a:0,e:'Agrega la propiedad a la búsqueda y después agenda el recorrido.'},
+   {q:'¿Puedes cancelar una visita ya confirmada?',o:['Sí, en cualquier momento','No: solo se cancela mientras está pendiente','Solo el Master Broker'],a:1,e:'Confirma cuando la hora ya esté acordada con el cliente.'},
+   {q:'¿Qué evalúa la encuesta post-visita sobre ti?',o:['Tu puntualidad en la plataforma','La atención del asesor','Tu nivel de ventas'],a:1,e:'Las respuestas alimentan los reviews que el propietario ve en Radar.'},
+   {q:'¿Para qué te sirve Radar con un propietario difícil?',o:['Para ver sus datos bancarios','Para mostrarle con transparencia la actividad y los reviews y negociar precio','Para bloquear a otros asesores'],a:1,e:'Es tu palanca para hablar de precio con datos.'},
+   {q:'Una propiedad no tiene leads ni vistas. ¿Qué hace Tareas?',o:['Nada','Te sugiere mejorar la publicación o revisar la valuación','La elimina'],a:1,e:'Tareas también te recuerda contactar clientes tras varios días sin seguimiento.'}
+  ]},
+ {id:'u8', track:'Plataforma Pulppo', icon:'hand', title:'Operaciones y cierre', sub:'Propuestas, estados y firmas',
+  concept:['En la plataforma, la oferta se llama propuesta. Una oferta de palabra con intención real ya debe registrarse.','Una propiedad puede tener varias propuestas. Cuando el propietario acepta una, pasa a oferta aceptada y el resto se cancela.','Operación compartida: una inmobiliaria de cada lado (vendedora y compradora).','El Centro de firmas concentra la firma de operaciones.','Ofertando, Operaciones Activas y Cerrados son etapas distintas del embudo.'],
+  qs:[
+   {q:'¿Cómo se llama una oferta en la plataforma?',o:['Propuesta','Apartado','Reserva'],a:0,e:'Regístrala aunque sea de palabra, si hay intención real.'},
+   {q:'El propietario acepta una de tres propuestas. ¿Qué haces con las otras dos?',o:['Dejarlas abiertas por si acaso','Cancelarlas','Convertirlas en visitas'],a:1,e:'Así el embudo refleja la realidad.'},
+   {q:'¿Qué es una operación compartida?',o:['Una operación con una inmobiliaria de cada lado','Una operación con dos compradores','Una operación de renta'],a:0,e:'También se le dice co-broker, pero en Pulppo el término es operación compartida.'},
+   {q:'¿Dónde se firman las operaciones dentro de la plataforma?',o:['En Radar','En el Centro de firmas','En Mi Pulppo'],a:1,e:'Está dentro del módulo Operaciones.'},
+   {q:'Verdadero o falso: “Ofertando” y “Cerrados” son la misma etapa.',o:['Verdadero','Falso'],a:1,e:'Embudo: Inventario → Leads → Respondidos → Visitando → Ofertando → Operaciones Activas → Cerrados.'}
+  ]},
+ {id:'u9', track:'Plataforma Pulppo', icon:'doc', title:'Legal y créditos', sub:'Acuerdos, expedientes e hipotecas',
+  concept:['El acuerdo de comercialización se firma al captar: define comisión, exclusividad, inicio y duración (3, 6, 9 meses, 1 año o personalizado).','Flujo del acuerdo: solicitud de documentación (identidad y título) → revisión → firma.','Tienes machotes en la Biblioteca Legal y un calendario para agendar asesoría legal.','Expediente básico: escritura, identificación, predial y agua al corriente, y CLG.','Servicios complementarios: Pulppo te apoya con créditos hipotecarios para tus clientes.'],
+  qs:[
+   {q:'¿Cuándo se firma el acuerdo de comercialización?',o:['Al captar la propiedad','Al cerrar la venta','Nunca, es opcional'],a:0,e:'Sin acuerdo completo, la plataforma no habilita publicar.'},
+   {q:'¿Qué documentos pide el flujo del acuerdo al propietario?',o:['Identidad del propietario y título de la propiedad','Solo su RFC','Su estado de cuenta bancario'],a:0,e:'El propietario también puede cargarlos desde Radar.'},
+   {q:'Necesitas un machote de contrato. ¿Dónde lo buscas?',o:['En la Biblioteca Legal','En Estadísticas','En Mi Pulppo'],a:0,e:'Si tu caso es especial, agenda asesoría en el calendario de Legales.'},
+   {q:'¿Cuál es la duración mínima que ofrece el selector del acuerdo?',o:['1 mes','3 meses','12 meses'],a:1,e:'Opciones: 3, 6, 9 meses, 1 año o personalizado.'},
+   {q:'Tu cliente tiene crédito Infonavit. En septiembre de 2026, ¿cuántos puntos mínimos necesita?',o:['116 puntos','1,080 puntos','5,000 puntos'],a:1,e:'Con el sistema vigente se piden 1,080 puntos. El monto final depende de su capacidad de pago.'}
+  ]},
+ {id:'u10', track:'Plataforma Pulppo', icon:'gauge', title:'Métricas y niveles', sub:'Lo que mide tu Home',
+  concept:['La Home te dice “¿Qué debo hacer hoy?” y muestra tus KPIs: tasa de visitas (umbral mayor a 10%), interacciones (meta 15) y tiempo de primera respuesta.','Con el switch en “No disponible”, varias métricas no corren. Úsalo con criterio.','Pausa de consultas: detiene la llegada de nuevos leads cuando no puedes atenderlos.','Niveles por facturación: Estándar, Profesional y Élite, en una ventana de 6 meses. El umbral para subir es de $100k en comisiones en 6 meses.'],
+  qs:[
+   {q:'¿Cuál es el umbral de la tasa de visitas en tu Home?',o:['Mayor a 10%','Mayor a 50%','Mayor a 1%'],a:0,e:'Tasa de visitas = qué parte de tus leads llega a visita.'},
+   {q:'Te vas de vacaciones una semana. ¿Qué haces?',o:['Nada, que lleguen los leads','Usas la pausa de consultas y tu disponibilidad','Desvinculas WhatsApp'],a:1,e:'Así nadie queda sin respuesta.'},
+   {q:'¿Cuáles son los niveles de broker?',o:['Bronce, Plata y Oro','Estándar, Profesional y Élite','Junior, Senior y Master'],a:1,e:'Un asesor sin nivel es No afiliado: aún no termina Academy.'},
+   {q:'¿Sobre qué ventana se calcula tu nivel?',o:['El último mes','Los últimos 6 meses','Toda tu historia'],a:1,e:'Es móvil: puedes subir o bajar de un mes a otro.'},
+   {q:'¿Cuál es la meta diaria de interacciones en la Home?',o:['5','15','50'],a:1,e:'Las interacciones son una tasa de actividad con tus clientes.'}
+  ]},
+ {id:'u11', track:'Oficio inmobiliario', icon:'tag', title:'Precio y objeciones', sub:'Lee tus métricas y negocia con datos',
+  concept:['Capta al precio vendible. Si el propietario insiste en uno alto, acuerda desde el inicio una estrategia de baja de precio.','Muchas vistas y pocas consultas: hay demanda, revisa ficha o precio.','Muchas vistas, veces compartida alta y pocas visitas: casi siempre es precio.','Pocas vistas y pocas consultas: revisa difusión en portales o geolocalización.','Formaliza toda oferta por escrito.'],
+  qs:[
+   {q:'Tu propiedad tiene muchas vistas pero casi no recibe consultas. ¿Qué revisas?',o:['La ficha o el precio','Tu WhatsApp','El clima'],a:0,e:'Hay interés en la zona y el tipo; algo en el anuncio no convence.'},
+   {q:'Muchas vistas, se comparte mucho, pero nadie la visita. ¿La causa más probable?',o:['Las fotos','El precio','La descripción'],a:1,e:'Antes descarta tu atención: WhatsApp vinculado y sin quejas.'},
+   {q:'Pocas vistas y pocas consultas. ¿Qué revisas primero?',o:['Difusión en portales y geolocalización','El precio de la competencia en otra ciudad','Nada, es normal'],a:0,e:'Si no se ve, no se vende.'},
+   {q:'El propietario pide un precio 20% arriba del ACM. ¿Qué haces?',o:['Aceptas sin más','Muestras el ACM y acuerdas una estrategia de baja de precio con fechas','Rechazas la propiedad sin explicar'],a:1,e:'Captar a precio vendible es la palanca número uno de conversión.'},
+   {q:'¿Cómo formalizas una oferta?',o:['Por llamada','Por escrito, y la registras como propuesta','Con un audio de WhatsApp'],a:1,e:'Escrita y registrada: así cuenta en tu embudo.'}
+  ]},
+ {id:'u12', track:'Oficio inmobiliario', icon:'flame', title:'Seguimiento que cierra', sub:'Constancia y registro',
+  concept:['Da de 5 a 7 toques de seguimiento antes de descartar un lead.','Propón dos horarios concretos para la visita y confírmala un día antes.','El mismo día de la visita, pide retroalimentación y define el siguiente paso.','Registra el 100% de tus interacciones en la plataforma: sin registro no hay métricas ni datos de demanda.'],
+  qs:[
+   {q:'¿Cuántos toques de seguimiento das antes de descartar un lead?',o:['1','De 5 a 7','20'],a:1,e:'La mayoría de los cierres llega después del tercer contacto.'},
+   {q:'¿Cómo propones una visita?',o:['“¿Cuándo puedes?”','Con dos horarios concretos','Esperas a que el cliente proponga'],a:1,e:'Dos opciones concretas facilitan que el cliente elija.'},
+   {q:'¿Cuándo confirmas la visita?',o:['Un día antes','Una semana antes','No se confirma'],a:0,e:'Reduce los no shows.'},
+   {q:'Terminó la visita. ¿Qué sigue?',o:['Esperar a que el cliente llame','Pedir retroalimentación el mismo día y definir el siguiente paso','Mandar otra propiedad sin preguntar'],a:1,e:'El seguimiento inmediato mantiene la búsqueda viva.'},
+   {q:'¿Qué parte de tus interacciones registras en la plataforma?',o:['Solo las importantes','El 100%','Ninguna, uso mi libreta'],a:1,e:'Tu registro alimenta Tareas, tus métricas y tu nivel.'}
+  ]}
+];
+
+const GUIDE = [
+ {id:'g1', title:'Entra a la plataforma', where:'broker.pulppo.com', body:'Inicia sesión con la cuenta que te dio tu inmobiliaria. Guarda el enlace en tus favoritos: aquí trabajarás todos los días.', link:{t:'Abrir broker.pulppo.com', u:'https://broker.pulppo.com'}},
+ {id:'g2', title:'Completa tu perfil', where:'Opciones de cuenta', body:'Agrega tu foto, teléfono y redes. Tus datos aparecen en Mi Pulppo cuando compartes propiedades con tus clientes.'},
+ {id:'g3', title:'Vincula tu WhatsApp Business', where:'Onboarding de Meta', body:'Sigue el flujo “Login with Facebook”. Sin WhatsApp vinculado no recibes ni respondes leads desde la plataforma.'},
+ {id:'g4', title:'Sincroniza tu cuenta de Google', where:'Calendario / Agenda', body:'Conecta tu Google para que tus visitas y eventos aparezcan en tu agenda. Si tienes dudas, pide ayuda en el canal de ayuda.'},
+ {id:'g5', title:'Activa tu disponibilidad', where:'Inicio · switch Disponible', body:'Con “Disponible” recibes leads y tus métricas corren. Si no puedes atender, usa la pausa de consultas.', link:{t:'Ver cómo pausar consultas', u:'https://app.guideflow.com/player/1pz4ye2ivr'}},
+ {id:'g6', title:'Recorre tu Home', where:'Inicio', body:'Revisa “¿Qué debo hacer hoy?”, tus KPIs (tasa de visitas, interacciones, primera respuesta) y los drawers de Conversaciones, Agenda y Notificaciones.'},
+ {id:'g7', title:'Sube tu primera propiedad', where:'Captaciones', body:'Recorre las etapas hasta el Acuerdo Comercial y publica. Recuerda seleccionar la zona de la lista.', link:{t:'Ver el tutorial guiado', u:'https://app.guideflow.com/player/8kozv24s5p'}},
+ {id:'g8', title:'Carga tu primera búsqueda y envía Mi Pulppo', where:'Búsquedas', body:'Registra lo que busca un cliente real (zonas, presupuesto, tipo) y compártele su Mi Pulppo.'},
+ {id:'g9', title:'Empieza tu curso en Academia', where:'Academia', body:'Tu Home te marca el curso pendiente. Terminar Academy es lo que te da tu primer nivel de broker.'}
+];
+
+const TASKS_ONCE = [
+ {id:'t1', t:'WhatsApp Business vinculado', d:'Verifica que aparezcas como conectado.'},
+ {id:'t2', t:'Google sincronizado', d:'Tus visitas aparecen en tu agenda.'},
+ {id:'t3', t:'Primera propiedad captada con ACM', d:'Con semáforo de valuación visible.'},
+ {id:'t4', t:'Primer acuerdo de comercialización firmado', d:'Con documentos del propietario solicitados.'},
+ {id:'t5', t:'Primera búsqueda cargada y Mi Pulppo enviado', d:'A un cliente real.'},
+ {id:'t6', t:'Primera visita confirmada', d:'Con la propiedad agregada a la búsqueda.'},
+ {id:'t7', t:'Kick off de Marketing', d:'Videollamada con el equipo de Marketing.'},
+ {id:'t8', t:'Kick off Legal', d:'Conoce la Biblioteca Legal y el calendario de asesoría.', link:{t:'Biblioteca Legal', u:'https://aniracemav.github.io/BibliotecaLEGAL/index.html#faq'}},
+ {id:'t9', t:'Sesión de créditos hipotecarios', d:'Servicios complementarios para tus clientes.'},
+ {id:'t10', t:'Solicitud al programa Exclusiva 1-5-10', d:'Si tienes una exclusiva que califique.', link:{t:'Formulario 1-5-10', u:'https://docs.google.com/forms/d/e/1FAIpQLSf8U4RKHH6iWT-cacs5yFmvn_aWAQWRKgb1dT2WR5fbAnUtVQ/viewform'}}
+];
+const TASKS_WEEK = [
+ {id:'w1', t:'Responder cada consulta en menos de 15 minutos'},
+ {id:'w2', t:'Registrar el 100% de mis interacciones'},
+ {id:'w3', t:'Revisar Tareas todos los días'},
+ {id:'w4', t:'Ajustar precio o ficha de propiedades en rojo o sin actividad'},
+ {id:'w5', t:'Dar seguimiento a búsquedas sin contacto'},
+ {id:'w6', t:'Leer las 5 noticias de la semana'}
+];
+
+/* =========================== ACADEMIA DEL BROKER =========================== */
+const ACADEMY = [
+ {id:'a1', icon:'doc', title:'Compraventa paso a paso', sub:'De la oferta a la escritura', badge:'Cierre seguro',
+  concept:['Una compraventa en México termina ante notario: la escritura inscrita es lo que da certeza al nuevo dueño.','La oferta se formaliza por escrito. Después suele firmarse una promesa de compraventa con arras: un anticipo que garantiza el trato.','El notario revisa documentos, solicita el Certificado de Libertad de Gravamen (CLG), calcula y retiene impuestos y firma la escritura.','Al final, la escritura se inscribe en el Registro Público de la Propiedad.'],
+  qs:[
+   {t:'order',q:'Ordena el proceso de una compraventa',items:['Captación y valuación','Oferta por escrito del comprador','Promesa de compraventa con arras','Notario revisa documentos y solicita CLG','Firma de la escritura ante notario','Inscripción en el Registro Público'],e:'Cada paso protege al siguiente: sin CLG no hay escritura segura y sin inscripción la compra no es oponible a terceros.'},
+   {t:'mc',q:'¿Qué son las arras?',o:['Un anticipo que garantiza el cumplimiento del trato','La comisión del asesor','El impuesto que paga el comprador'],a:0,e:'Si una parte incumple sin causa, se aplican las penas pactadas. Déjalo por escrito.'},
+   {t:'mc',q:'¿Quién calcula y retiene el ISR del vendedor en la escritura?',o:['El asesor inmobiliario','El notario','El banco'],a:1,e:'El notario calcula, retiene y entera el impuesto.'},
+   {t:'sc',q:'Tu comprador quiere entregar el anticipo en efectivo, sin firmar nada, “por confianza”. ¿Qué haces?',o:['Lo recibes y le das un recibo simple','Propones firmar una promesa de compraventa con arras, precio y plazos por escrito','Le dices que no hace falta anticipo'],a:1,fb:['Un recibo no fija plazos ni penas: si algo falla, nadie queda protegido.','Correcto: la promesa deja claros precio, plazos, arras y penas para ambas partes.','Sin anticipo el vendedor puede seguir ofreciendo la propiedad y tu comprador la pierde.']},
+   {t:'mc',q:'¿Para qué se inscribe la escritura en el Registro Público de la Propiedad?',o:['Para que la compra sea oponible a terceros','Para bajar el predial','Para obtener el crédito'],a:0,e:'La inscripción da publicidad y certeza jurídica al nuevo dueño.'},
+   {t:'mc',q:'Verdadero o falso: la promesa de compraventa ya transmite la propiedad.',o:['Verdadero','Falso'],a:1,e:'La promesa obliga a firmar el contrato definitivo. La propiedad se transmite con la escritura.'}
+  ]},
+ {id:'a2', icon:'folder', title:'Expediente del inmueble', sub:'Documentos que evitan sorpresas', badge:'Expediente impecable',
+  concept:['Un expediente completo acelera la escritura y evita que la operación se caiga al final.','Básicos: escritura inscrita, identificación de propietarios, predial y agua al corriente, CLG y, si aplica, reglamento de condominio y no adeudo de mantenimiento.','Revisa el estado civil del vendedor: si está casado por sociedad conyugal, su cónyuge también firma.','Pide los documentos al captar, no cuando ya tienes comprador.'],
+  qs:[
+   {t:'match',q:'Une cada documento con lo que acredita',pairs:[['Escritura','Quién es el dueño y cómo adquirió'],['CLG','Que no hay hipotecas ni embargos'],['Boleta predial','Impuesto anual del inmueble al corriente'],['Reglamento de condominio','Reglas de áreas comunes y cuotas']],e:'Con estos cuatro documentos revisados detectas el 80% de los problemas antes de publicar.'},
+   {t:'sc',q:'El vendedor está casado por sociedad conyugal y su esposa no quiere ir a la firma. ¿Qué implica?',o:['Nada, firma solo él','Ella también debe firmar, o un apoderado con poder notarial','Conviene cambiarlo a renta'],a:1,fb:['En sociedad conyugal el inmueble es de ambos: sin su firma no hay escritura.','Correcto: detectarlo al captar te da tiempo de tramitar un poder si hace falta.','Cambiar de operación no resuelve quién es dueño del inmueble.']},
+   {t:'mc',q:'¿Cuándo conviene pedir los documentos al propietario?',o:['Al captar','Cuando ya hay comprador','El día de la escritura'],a:0,e:'Pedirlos al inicio te deja resolver adeudos o faltantes sin presión.'},
+   {t:'order',q:'Ordena cómo armar el expediente al captar',items:['Pedir escritura e identificación de propietarios','Verificar estado civil y régimen matrimonial','Pedir predial y agua al corriente','Solicitar o revisar el CLG','Resguardar copias en el expediente'],e:'Primero confirmas quién es dueño y quién firma; después, que no haya adeudos ni gravámenes.'},
+   {t:'sc',q:'La propiedad tiene una hipoteca vigente. ¿Se puede vender?',o:['No, nunca','Sí: se liquida antes o en la misma escritura con carta de adeudo del banco','Sí, sin avisar al banco'],a:1,fb:['Es muy común vender con hipoteca vigente.','Correcto: el banco emite carta de adeudo y la hipoteca se cancela en el mismo acto.','La hipoteca está inscrita: el notario no puede ignorarla.']},
+   {t:'mc',q:'Verdadero o falso: el CLG muestra si hay gravámenes registrados sobre el inmueble.',o:['Verdadero','Falso'],a:0,e:'Por eso el notario lo solicita antes de firmar.'}
+  ]},
+ {id:'a3', icon:'coin', title:'Créditos hipotecarios', sub:'Infonavit, Fovissste, Cofinavit y banco', badge:'Experto en créditos',
+  concept:['Infonavit: trabajadores del sector privado. En 2026 pide 1,080 puntos mínimo y presta hasta ~$2.94 millones.','Fovissste: trabajadores al servicio del Estado.','Cofinavit: combina Infonavit con un banco para aumentar el monto.','Crédito bancario: la tasa hipotecaria promedio fue de 11.42% en el segundo trimestre de 2026 (SHF).','Regla práctica: la mensualidad no debería pasar de ~30% del ingreso. Además hay que juntar enganche y gastos de escrituración.'],
+  qs:[
+   {t:'match',q:'Une cada crédito con quién lo usa',pairs:[['Infonavit','Trabajador del sector privado'],['Fovissste','Trabajador del Estado'],['Cofinavit','Infonavit + banco para más monto'],['Bancario','Quien califique con el banco']],e:'Saber qué crédito tiene tu cliente define su presupuesto real.'},
+   {t:'calc',q:'Tu cliente gana $40,000 al mes. Con la regla práctica del 30%, ¿cuál es su mensualidad máxima?',a:12000,tol:1,pre:'$',e:'$40,000 × 0.30 = $12,000. Es una guía: cada banco evalúa su capacidad de pago.'},
+   {t:'calc',q:'Casa de $2,500,000 con 10% de enganche. ¿Cuánto enganche necesita?',a:250000,tol:1,pre:'$',e:'$2,500,000 × 0.10 = $250,000. Súmale gastos de escrituración.'},
+   {t:'mc',q:'¿Cuántos puntos pide Infonavit como mínimo en 2026?',o:['116','1,080','3,000'],a:1,e:'El monto final depende de su capacidad de pago en Mi Cuenta Infonavit.'},
+   {t:'sc',q:'Tu cliente tiene precalificación Infonavit de $1.4 M y quiere ver casas de $2.2 M. ¿Qué haces?',o:['Le enseñas las de $2.2 M para motivarlo','Revisas con él ahorro, Cofinavit o crédito bancario y ajustas la búsqueda a lo que sí puede pagar','Le dices que no puede comprar'],a:1,fb:['Visitas que no puede pagar = frustración y tiempo perdido.','Correcto: primero el presupuesto real, luego la búsqueda.','Casi siempre hay una ruta: sumar ahorro, cofinanciar o ajustar zona.']},
+   {t:'order',q:'Ordena los pasos de un comprador con crédito',items:['Precalificación','Búsqueda dentro de su presupuesto','Oferta aceptada','Avalúo y trámite del crédito','Firma de escritura con el banco'],e:'La precalificación va primero: define qué propiedades mostrar.'}
+  ]},
+ {id:'a4', icon:'key', title:'Arrendamiento', sub:'Rentar bien, sin sustos', badge:'Maestro de rentas',
+  concept:['Perfila al inquilino: ingresos (regla práctica: 3 veces la renta), historial y referencias.','Garantía: fiador con inmueble libre de gravamen o póliza jurídica, que investiga al inquilino y da respaldo legal si incumple.','Contrato por escrito con plazo, renta, depósito, incrementos y entrega con inventario.','En CDMX, el aumento anual al renovar no puede superar la inflación del año anterior: 3.69% en 2026, criterio validado por la SCJN.'],
+  qs:[
+   {t:'order',q:'Ordena el proceso de una renta',items:['Perfilar al inquilino','Investigación con póliza jurídica o fiador','Firma de contrato','Pago de depósito y primera renta','Entrega del inmueble con inventario'],e:'La garantía se resuelve antes de firmar, nunca después.'},
+   {t:'calc',q:'En CDMX un inquilino renueva y paga $15,000. ¿Cuál es la renta máxima en 2026 con el tope de 3.69%?',a:15553.5,tol:1,pre:'$',e:'$15,000 × 1.0369 = $15,553.50.'},
+   {t:'calc',q:'La renta es de $18,000. Con la regla práctica de 3 veces la renta, ¿cuánto debe ganar al mes el inquilino?',a:54000,tol:1,pre:'$',e:'$18,000 × 3 = $54,000.'},
+   {t:'mc',q:'¿Qué hace una póliza jurídica?',o:['Asegura el inmueble contra sismo','Investiga al inquilino y da respaldo legal si incumple','Sustituye al contrato'],a:1,e:'Es la alternativa más común cuando no hay fiador.'},
+   {t:'sc',q:'El inquilino no tiene fiador con inmueble. ¿Qué propones?',o:['Rentar sin garantía','Ofrecer póliza jurídica','Pedir 12 meses de depósito'],a:1,fb:['Sin garantía, el propietario asume todo el riesgo.','Correcto: protege al propietario y le da al inquilino una vía viable.','Un depósito desproporcionado ahuyenta a buenos inquilinos.']},
+   {t:'match',q:'Une cada concepto con su función',pairs:[['Fiador','Garantiza con un inmueble libre de gravamen'],['Depósito','Cubre daños o adeudos al final'],['Inventario','Registra el estado del inmueble'],['Póliza jurídica','Investigación y respaldo legal']],e:'Los cuatro juntos hacen una renta sin sustos.'}
+  ]},
+ {id:'a5', icon:'chart', title:'Valuación y $/m²', sub:'El idioma del mercado', badge:'Ojo de valuador',
+  concept:['El precio por m² es el idioma del mercado: precio ÷ m² construidos.','Usa 6 a 10 comparables de superficie similar (±20%): vendidos, activos y retirados.','Homologa: ajusta el $/m² por estado, piso, vista y estacionamientos (normalmente ±3% a 10%).','El avalúo lo emite un perito o unidad de valuación y lo piden el banco y el notario. La opinión de valor la hace el asesor para fijar el precio de salida.'],
+  qs:[
+   {t:'calc',q:'Un departamento de 90 m² se vende en $3,600,000. ¿Cuál es su precio por m²?',a:40000,tol:1,pre:'$',post:'/m²',e:'$3,600,000 ÷ 90 = $40,000 por m².'},
+   {t:'calc',q:'El $/m² de la zona es $42,000. Tu departamento tiene 75 m². ¿Qué precio de referencia sale?',a:3150000,tol:1,pre:'$',e:'$42,000 × 75 = $3,150,000.'},
+   {t:'calc',q:'Un comparable vale $42,000/m² y tiene estacionamiento; el tuyo no. Ajustas −5%. ¿Qué $/m² homologado usas?',a:39900,tol:1,pre:'$',post:'/m²',e:'$42,000 × 0.95 = $39,900.'},
+   {t:'mc',q:'¿Quién emite un avalúo?',o:['El asesor','Un perito o unidad de valuación autorizada','El propietario'],a:1,e:'Tu opinión de valor sirve para fijar precio; el avalúo, para crédito e impuestos.'},
+   {t:'order',q:'Ordena los pasos de un análisis comparativo',items:['Describir el inmueble','Elegir 6 a 10 comparables','Homologar el $/m²','Revisar demanda y días en mercado','Concluir rango y precio de salida'],e:'Sin homologar, comparas peras con manzanas.'},
+   {t:'sc',q:'El propietario dice: “Mi vecino vendió en $5 M, el mío vale lo mismo”. Tu análisis dice $4.4 M.',o:['Aceptas $5 M','Comparas m², estado y fecha de esa venta con tu análisis, junto con él','Le dices que su vecino mintió'],a:1,fb:['Captar sobrevaluado casi garantiza una propiedad estancada.','Correcto: con datos lado a lado, el propietario llega solo a la conclusión.','Descalificar al vecino rompe la confianza.']}
+  ]},
+ {id:'a6', icon:'scale', title:'Impuestos y gastos', sub:'Quién paga qué', badge:'Cuentas claras',
+  concept:['ISR por venta: lo paga el vendedor sobre la ganancia; el notario lo calcula y retiene.','Exención por casa habitación: persona física, que sea su casa habitación, precio de venta hasta 700,000 UDIS y una vez cada 3 años.','ISAI (impuesto sobre adquisición de inmuebles): lo paga el comprador; la tasa depende de la entidad.','Regla práctica: los gastos de escrituración del comprador suelen sumar entre 5% y 8% del valor, según la entidad.'],
+  qs:[
+   {t:'match',q:'Une cada concepto con quién lo paga o lo hace',pairs:[['ISR por venta','Vendedor'],['ISAI','Comprador'],['Retención de impuestos','Notario'],['Predial hasta la escritura','Vendedor, al corriente']],e:'Explícalo desde la primera cita: evita sorpresas en la firma.'},
+   {t:'mc',q:'El tope de la exención de ISR por casa habitación se mide sobre…',o:['La ganancia','El precio de venta (hasta 700,000 UDIS)','El valor catastral'],a:1,e:'Si el precio supera el tope, solo se grava la parte proporcional del excedente.'},
+   {t:'mc',q:'¿Cada cuánto se puede usar la exención?',o:['Cada año','Una vez cada 3 años','Una sola vez en la vida'],a:1,e:'El notario verifica que no se haya usado en los últimos 3 años.'},
+   {t:'calc',q:'Casa de $3,000,000. Si los gastos de escrituración del comprador son 6%, ¿cuánto debe prever?',a:180000,tol:1,pre:'$',e:'$3,000,000 × 0.06 = $180,000.'},
+   {t:'sc',q:'Un vendedor usó la exención hace 2 años y ahora vende otra casa. ¿Qué le dices?',o:['Que está exento otra vez','Que probablemente pague ISR y lo revise con el notario o su contador','Que no pague nada'],a:1,fb:['No han pasado 3 años: no aplica.','Correcto: canalízalo a tiempo para que calcule su precio neto.','Es una obligación fiscal; el notario la retiene de todos modos.']},
+   {t:'mc',q:'Verdadero o falso: el ISAI lo paga el vendedor.',o:['Verdadero','Falso'],a:1,e:'Lo paga el comprador.'}
+  ]},
+ {id:'a7', icon:'hand', title:'Negociación y objeciones', sub:'Convierte un “no” en un siguiente paso', badge:'Negociador',
+  concept:['Una objeción es una pregunta disfrazada: primero entiende qué la provoca.','Método: escucha sin interrumpir, aclara con una pregunta, valida, responde con datos y propone un siguiente paso.','Toda concesión se intercambia: “Si ajustamos el precio, ¿firmamos la exclusiva hoy?”.','Negocia con datos (análisis, días en mercado, visitas), no con opiniones.','Practica en el Simulador de clientes.'],
+  qs:[
+   {t:'order',q:'Ordena el método para manejar una objeción',items:['Escuchar sin interrumpir','Aclarar con una pregunta','Validar la preocupación','Responder con datos','Proponer el siguiente paso'],e:'Responder antes de entender es el error más común.'},
+   {t:'sc',q:'Comprador: “Está muy cara”. ¿Qué respondes primero?',o:['“Es el precio, no se mueve”','“¿Cara comparada con qué otras que has visto?”','“Te consigo 20% de descuento”'],a:1,fb:['Cierra la conversación sin entender la objeción.','Correcto: una pregunta te dice contra qué te está comparando.','Regalas margen del vendedor sin saber si era el problema.']},
+   {t:'sc',q:'Propietaria: “No quiero exclusiva, con más asesores se vende más rápido”.',o:['“Entonces no la tomo”','Le muestras cómo una exclusiva recibe más inversión y un solo precio en el mercado, y propones un plazo corto con reportes','Aceptas sin exclusiva y sin plan'],a:1,fb:['Pierdes la captación sin intentarlo.','Correcto: plan concreto + plazo corto reduce su riesgo percibido.','Sin exclusiva ni plan, compites contra otros asesores con la misma propiedad.']},
+   {t:'mc',q:'¿Cómo haces una concesión?',o:['Gratis, para caer bien','A cambio de algo: plazo, exclusiva o firma','Nunca haces concesiones'],a:1,e:'Una concesión sin contrapartida se vuelve el nuevo punto de partida.'},
+   {t:'sc',q:'El comprador ofrece 15% menos. El vendedor se molesta al escucharlo.',o:['Rechazas la oferta sin presentarla','Presentas la oferta con datos del mercado y buscas una contraoferta','Le dices al comprador que es una ofensa'],a:1,fb:['Toda oferta formal se presenta: es tu obligación con el vendedor.','Correcto: la contraoferta mantiene viva la negociación.','Romper con el comprador cierra la única oferta que tienes.']},
+   {t:'mc',q:'Verdadero o falso: negociar con datos es más efectivo que dar tu opinión.',o:['Verdadero','Falso'],a:0,e:'Los datos despersonalizan la conversación: ya no es tu opinión contra la suya.'}
+  ]},
+ {id:'a8', icon:'cam', title:'Marketing inmobiliario', sub:'Anuncios que generan visitas', badge:'Creador de anuncios',
+  concept:['Las fotos venden la visita: 12 o más, horizontales, con luz natural y espacios ordenados.','Título: tipo + m² o recámaras + diferenciador + ubicación.','Descripción en bloques: gancho, distribución, números, entorno, condiciones y llamado a la acción.','Publica en varios canales y mide: vistas, consultas y visitas te dicen qué ajustar.'],
+  qs:[
+   {t:'order',q:'Arma el título en el orden correcto',items:['Departamento','3 recámaras','con terraza','en la Del Valle'],e:'“Departamento 3 recámaras con terraza en la Del Valle”: tipo + tamaño + diferenciador + ubicación.'},
+   {t:'mc',q:'¿Qué fotos convierten mejor?',o:['Verticales con flash','Horizontales, con luz natural y espacios ordenados','Pocas y tomadas de lejos'],a:1,e:'La primera foto decide si alguien abre tu anuncio.'},
+   {t:'match',q:'Une cada bloque de la descripción con su función',pairs:[['Gancho','Frase que hace detenerse al lector'],['Distribución','Qué espacios tiene y cómo se conectan'],['Entorno','Qué hay cerca: escuelas, transporte, parques'],['Llamado a la acción','Qué hacer ahora: agendar visita']],e:'Estructura = lectura rápida = más consultas.'},
+   {t:'sc',q:'Tu anuncio tiene muchas vistas y casi ninguna consulta.',o:['Subes más fotos iguales','Revisas precio, título y primera foto','Lo borras y lo vuelves a subir igual'],a:1,fb:['Más de lo mismo no cambia el resultado.','Correcto: hay interés en la zona; algo del anuncio no convence.','Repetir el mismo anuncio no ataca la causa.']},
+   {t:'calc',q:'Un anuncio tuvo 1,200 vistas y 36 consultas. ¿Qué porcentaje de las vistas se convirtió en consulta?',a:3,tol:0.05,post:'%',e:'36 ÷ 1,200 = 0.03 = 3%.'},
+   {t:'mc',q:'Verdadero o falso: una buena descripción termina con un llamado a la acción.',o:['Verdadero','Falso'],a:0,e:'Dile al lector qué hacer: “Agenda tu visita esta semana”.'}
+  ]},
+ {id:'a9', icon:'shield', title:'Ética y cumplimiento', sub:'Antilavado y datos personales', badge:'Broker íntegro',
+  concept:['La compraventa de inmuebles es actividad vulnerable según la ley antilavado (LFPIORPI): identifica siempre a tu cliente.','En 2026, las operaciones de 8,025 UMA o más (~$941,413 con UMA de $117.31) se reportan con un aviso al SAT a más tardar el día 17 del mes siguiente.','Desde la reforma de 2025, el expediente del cliente se conserva 10 años.','Datos personales: comparte el aviso de privacidad y usa la información solo para la operación.','Nunca prometas plusvalías garantizadas ni ocultes defectos conocidos del inmueble.'],
+  qs:[
+   {t:'calc',q:'Con la UMA 2026 de $117.31, ¿a cuántos pesos equivalen 8,025 UMA?',a:941412.75,tol:1,pre:'$',e:'8,025 × $117.31 = $941,412.75.'},
+   {t:'mc',q:'¿Hasta qué día se presenta el aviso de una operación reportable?',o:['El día 1','El día 17 del mes siguiente','Al final del año'],a:1,e:'Se presenta en el portal de prevención de lavado del SAT (SPPLD).'},
+   {t:'sc',q:'Un comprador quiere pagar $1.2 M en efectivo y “sin tanto papeleo”.',o:['Aceptas, es dinero','Explicas que debes identificarlo, que hay límites al efectivo y que la operación se reporta; lo canalizas con el notario','Le sugieres dividir el pago en partes pequeñas'],a:1,fb:['Te expones a sanciones y a responsabilidad penal.','Correcto: transparencia desde el inicio y todo por la vía formal.','Fraccionar pagos para evitar un reporte es justo una alerta de lavado.']},
+   {t:'mc',q:'¿Cuántos años se conserva el expediente del cliente tras la reforma de 2025?',o:['2','5','10'],a:2,e:'Antes eran 5 años.'},
+   {t:'sc',q:'El propietario te pide no mencionar una filtración que ya conoce.',o:['No dices nada','Le explicas que ocultar defectos conocidos los expone a ambos y propones repararla o informarla','Bajas el precio sin explicar'],a:1,fb:['Ocultarlo puede anular la venta y dañar tu reputación.','Correcto: transparencia protege al vendedor, al comprador y a ti.','El comprador tiene derecho a saber qué compra.']},
+   {t:'match',q:'Une cada término con su significado',pairs:[['LFPIORPI','Ley antilavado'],['UMA','Unidad para calcular umbrales'],['Aviso de privacidad','Cómo usarás los datos del cliente'],['SPPLD','Portal del SAT para los avisos']],e:'Conocer estos términos te hace un asesor confiable ante clientes y notarios.'}
+  ]}
+];
+
+const SIMS = [
+ {id:'s1', title:'Propietario con sobreprecio', who:'Don Ernesto, 61 años', setup:'Tiene un departamento de 85 m² en la Narvarte y pide $5.2 M. Tu análisis da un rango de $4.3 a $4.5 M.', goal:'Acordar un precio de salida realista o una estrategia de ajuste con fechas.',
+  persona:'Eres Don Ernesto, 61 años, propietario de un departamento de 85 m² en la colonia Narvarte, CDMX. Quieres vender en 5.2 millones porque tu vecino del 302 "vendió en eso" y necesitas el dinero para mudarte a Querétaro en unos 6 meses. Eres amable pero terco con el precio y desconfías de los asesores que "solo quieren bajar el precio". Cedes poco a poco solo si el asesor escucha tus razones, muestra datos concretos (comparables, días en mercado) y te propone un plan con fechas.',
+  opener:'Mire, joven, yo sé lo que vale mi departamento. El del 302 se vendió en cinco millones doscientos. No lo voy a regalar.'},
+ {id:'s2', title:'Compradora que quiere esperar', who:'Mariana, 32 años', setup:'Tiene precalificación Infonavit de $1.6 M y $200 mil de ahorro. Le gustó una casa de $1.75 M, pero quiere esperar a que bajen las tasas.', goal:'Resolver su duda y acordar un paso concreto: una segunda visita o una cita para revisar números.',
+  persona:'Eres Mariana, 32 años, trabajas en una empresa privada y tienes precalificación Infonavit de 1.6 millones y 200 mil pesos de ahorro. Viste tres casas con el asesor y te gustó una de 1.75 millones, pero leíste que las tasas podrían bajar y quieres esperar. También te da miedo endeudarte. Avanzas si el asesor entiende tu miedo, explica con claridad (por ejemplo, que el crédito Infonavit es a tasa fija y que Banxico anticipó mantener su tasa) y te propone un paso pequeño y concreto.',
+  opener:'Hola, oye, lo estuve pensando y creo que mejor me espero unos meses. Dicen que van a bajar las tasas, ¿no?'},
+ {id:'s3', title:'Inquilino que regatea', who:'Luis, 28 años', setup:'Quiere rentar un departamento de $18,000, ofrece $15,500 y no tiene fiador con inmueble.', goal:'Cerrar la renta con una garantía y un monto que el propietario pueda aceptar.',
+  persona:'Eres Luis, 28 años, desarrollador de software, ganas unos 60 mil pesos al mes. Te encantó un departamento de 18 mil pesos de renta pero quieres pagar 15,500. No tienes fiador con inmueble y te molestan los requisitos. Aceptas avanzar si el asesor te ofrece una solución razonable: póliza jurídica, un monto intermedio o un contrato más largo a cambio de mejor renta.',
+  opener:'Me gustó mucho el depa, pero 18 mil está muy arriba. Te ofrezco 15,500. Y fiador no tengo, eh.'},
+ {id:'s4', title:'Propietaria sin exclusiva', who:'Patricia, 45 años', setup:'Quiere vender su casa en Coyoacán con varios asesores a la vez. No quiere firmar exclusiva.', goal:'Firmar un acuerdo de comercialización en exclusiva, aunque sea por un plazo corto.',
+  persona:'Eres Patricia, 45 años, dueña de una casa de 3 recámaras en Coyoacán que calculas en unos 7 millones. Crees que con varios asesores se vende más rápido y no quieres "amarrarte" con uno solo porque un asesor anterior se desapareció y la casa estuvo parada medio año. Aceptas una exclusiva si el asesor te muestra un plan de marketing concreto, reportes de avance y un plazo corto (por ejemplo, 3 meses).',
+  opener:'Te lo digo desde ya: no firmo exclusivas. La última vez el asesor se desapareció y la casa estuvo parada medio año.'}
+];
+
+
+/* =========================== ESTADO =========================== */
+const DAILY_GOAL = 30;
+const TOTAL_ITEMS = UNITS.length + GUIDE.length + TASKS_ONCE.length;
+const fresh = () => ({xp:0, streak:0, lastDay:'', lessons:{}, guide:{}, tasks:{}, weekly:{}, today:{day:'',xp:0}, inmo:'', updatedAt:0, academy:{}, mistakes:[], dailyDone:'', sims:{}});
+let S = fresh();
+let db=null, userNs=null, uid=null, isOwner=false, sample=null;
+let team = [];       // docs de progress
+let news = null;     // doc news/current
+let loadedRemote = false;
+const LS_KEY = 'ruta-pulppo-v1';
+
+const pad = n => String(n).padStart(2,'0');
+const dayStr = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today = () => dayStr(new Date());
+const yesterday = () => { const d=new Date(); d.setDate(d.getDate()-1); return dayStr(d); };
+function isoWeek(d=new Date()){ const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())); const day=t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day); const y=new Date(Date.UTC(t.getUTCFullYear(),0,1)); return t.getUTCFullYear()+'-W'+pad(Math.ceil(((t-y)/864e5+1)/7)); }
+const WEEK = isoWeek();
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = id => document.getElementById(id);
+
+function loadLocal(){ try{ const raw=localStorage.getItem(LS_KEY); if(raw) S=Object.assign(fresh(), JSON.parse(raw)); }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+
+let saving=false, pendingSave=false, saveTimer=null;
+function persist(){
+  S.updatedAt = Date.now();
+  saveLocal();
+  if(!(db && uid && loadedRemote)) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flush, 600);
+}
+async function flush(){
+  if(saving){ pendingSave=true; return; }
+  saving=true;
+  try{ await db.doc('progress/'+uid).set(JSON.parse(JSON.stringify(S))); setSync('Progreso guardado. Tu líder lo ve en su panel.'); }
+  catch(e){ setSync(e && e.code==='quota_exceeded' ? 'No se pudo guardar: el espacio del equipo está lleno. Avísale a tu líder.' : 'No se pudo guardar en línea; se conserva en este navegador.'); }
+  saving=false;
+  if(pendingSave){ pendingSave=false; flush(); }
+}
+function setSync(t){ $('sync').textContent=t; }
+
+function addXp(n){
+  const d=today();
+  if(S.today.day!==d) S.today={day:d,xp:0};
+  S.today.xp += n; S.xp += n;
+  if(S.lastDay!==d){ S.streak = (S.lastDay===yesterday()) ? S.streak+1 : 1; S.lastDay=d; }
+}
+function toast(t){ const el=$('toast'); el.textContent=t; el.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true, 2200); }
+
+/* =========================== HUD =========================== */
+function pathPct(st=S){
+  const l=Object.keys(st.lessons||{}).filter(k=>UNITS.some(u=>u.id===k)).length;
+  const g=GUIDE.filter(x=>st.guide?.[x.id]).length;
+  const t=TASKS_ONCE.filter(x=>st.tasks?.[x.id]).length;
+  return Math.round((l+g+t)/TOTAL_ITEMS*100);
+}
+function streakNow(st=S){ return (st.lastDay===today()||st.lastDay===yesterday()) ? st.streak : 0; }
+function renderHud(){
+  const tx = S.today.day===today()? S.today.xp : 0;
+  $('hStreak').textContent = streakNow();
+  $('hStreakCap').textContent = streakNow()===1 ? 'día seguido' : 'días seguidos';
+  $('hXp').textContent = S.xp.toLocaleString('es-MX');
+  $('hLevel').textContent = 'Nivel ' + (Math.floor(S.xp/150)+1) + ' · ' + (150 - S.xp%150) + ' XP para subir';
+  $('hGoal').textContent = Math.min(tx,DAILY_GOAL) + '/' + DAILY_GOAL;
+  $('hGoalBar').style.width = Math.min(100, tx/DAILY_GOAL*100) + '%';
+  $('hPath').textContent = pathPct() + '%';
+  const gLeft = GUIDE.filter(x=>!S.guide[x.id]).length;
+  $('dGuide').hidden = !gLeft; $('dGuide').textContent = gLeft;
+  const wk = S.weekly[WEEK]||{};
+  const tLeft = TASKS_WEEK.filter(x=>!wk[x.id]).length;
+  $('dTasks').hidden = !tLeft; $('dTasks').textContent = tLeft;
+}
+
+/* =========================== APRENDER =========================== */
+let track = 'pulppo';
+try{ const t=localStorage.getItem(LS_KEY+'-track'); if(t==='academia'||t==='pulppo') track=t; }catch(e){}
+const TYPE_LABEL={mc:'Opción múltiple',order:'Ordenar',match:'Emparejar',calc:'Calcular',sc:'Escenario'};
+const shuffle = a => { const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+const fmtN = n => Number(n).toLocaleString('es-MX',{maximumFractionDigits:2});
+const qType = q => q.t || 'mc';
+function unitState(list, store, i){
+  const u=list[i];
+  if(store[u.id]) return 'done';
+  if(isOwner) return 'current';
+  return (i===0 || store[list[i-1].id]) ? 'current' : 'locked';
+}
+function pathHtml(list, store, listKey, trackLabel){
+  let html = `<div class="track-title"><span class="tag">${esc(trackLabel)}</span><span class="line"></span></div><div class="units">`;
+  list.forEach((u,i)=>{
+    const st=unitState(list,store,i); const r=store[u.id];
+    const icon = st==='done' ? ico('check',2) : st==='locked' ? ico('lock') : ico(u.icon);
+    const badge = st==='done' ? `<span class="pill ok">${r.best}/${u.qs.length} correctas</span>` : st==='current' ? `<span class="pill warn">${isOwner?'Disponible':'Siguiente'}</span>` : `<span class="pill">Bloqueada</span>`;
+    const btn = st==='locked' ? '' : `<button class="btn small ${st==='done'?'ghost':''} go" data-list="${listKey}" data-unit="${i}">${st==='done'?'Repasar':'Empezar'}</button>`;
+    const types = listKey==='academia' ? `<div class="types">${[...new Set(u.qs.map(qType))].map(t=>`<span class="tchip">${TYPE_LABEL[t]}</span>`).join('')}</div>` : '';
+    html += `<div class="unit ${st}"><div class="node" aria-hidden="true">${icon}</div><div class="meta"><h3>${esc(u.title)}</h3><p class="muted">${esc(u.sub)}</p>${types}<div class="row">${badge}${btn}</div></div></div>`;
+  });
+  return html + '</div>';
+}
+function renderLearn(){
+  const v=$('view-learn');
+  const seg = `<div class="seg" role="tablist" aria-label="Ruta"><button role="tab" aria-selected="${track==='pulppo'}" data-track="pulppo">Plataforma Pulppo</button><button role="tab" aria-selected="${track==='academia'}" data-track="academia">Academia del Broker</button></div>`;
+  let body='';
+  if(track==='pulppo'){
+    const done = UNITS.filter(u=>S.lessons[u.id]).length;
+    body = `<div class="section-head"><span class="tag">Plataforma Pulppo · ${done} de ${UNITS.length} unidades</span><h2>Domina la plataforma</h2><p class="muted">Cada unidad es una lección corta con 5 preguntas. Gana 10 XP por respuesta correcta al primer intento.</p></div>` + pathHtml(UNITS, S.lessons, 'pulppo', 'Plataforma Pulppo');
+  } else {
+    const done = ACADEMY.filter(u=>S.academy[u.id]).length;
+    const dailyDone = S.dailyDone===today();
+    const nMist = S.mistakes.length;
+    const simBest = Object.values(S.sims||{});
+    body = `<div class="section-head"><span class="tag">Academia del Broker · ${done} de ${ACADEMY.length} temas</span><h2>El oficio inmobiliario</h2><p class="muted">Compraventa, créditos, rentas, valuación, impuestos, negociación y más. Ejercicios para ordenar, emparejar y calcular, con 3 vidas por lección y combos por respuestas seguidas.</p></div>
+    <div class="actions3">
+      <button class="acard" id="aDaily"><span class="ic">${ico('flame')}</span><span class="tag">Reto del día</span><h3>${dailyDone?'Completado hoy':'3 preguntas'}</h3><span class="cap">${dailyDone?'Vuelve mañana por otro reto.':'Mezcla de todos los temas · +15 XP extra'}</span></button>
+      <button class="acard" id="aReview" ${nMist?'':'disabled'}><span class="ic">${ico('refresh')}</span><span class="tag">Repasar errores</span><h3>${nMist} pendiente${nMist===1?'':'s'}</h3><span class="cap">${nMist?'Practica las preguntas que fallaste.':'Aquí aparecerán las preguntas que falles.'}</span></button>
+      <button class="acard" id="aSim" ${sample?'':'disabled'}><span class="ic">${ico('chat')}</span><span class="tag">Simulador de clientes</span><h3>${simBest.length?`Mejor: ${Math.max(...simBest)}/100`:'Negocia con un cliente'}</h3><span class="cap">${sample?'Claude interpreta al cliente y te califica.':'Disponible al abrir la app desde claude.ai.'}</span></button>
+    </div>
+    <div><div class="track-title"><span class="tag">Insignias · ${done} de ${ACADEMY.length}</span><span class="line"></span></div>
+    <div class="badges">${ACADEMY.map(u=>`<div class="badge ${S.academy[u.id]?'on':''}" title="${esc(u.title)}"><span class="b">${ico(u.icon)}</span><span>${esc(u.badge)}</span></div>`).join('')}</div></div>
+    ` + pathHtml(ACADEMY, S.academy, 'academia', 'Temas');
+  }
+  v.innerHTML = seg + body;
+  v.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{ track=b.dataset.track; try{localStorage.setItem(LS_KEY+'-track',track);}catch(e){} renderLearn(); });
+  v.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>startUnit(b.dataset.list,+b.dataset.unit));
+  if($('aDaily')) $('aDaily').onclick=startDaily;
+  if($('aReview')) $('aReview').onclick=startReview;
+  if($('aSim')) $('aSim').onclick=openSimPicker;
+}
+
+/* ---- Motor de lecciones ---- */
+let L=null, SIM=null;
+function qByKey(key){ const [uid,k]=key.split(':'); const u=[...UNITS,...ACADEMY].find(x=>x.id===uid); return u ? u.qs[+k] : null; }
+function startUnit(listKey,i){
+  const list = listKey==='academia' ? ACADEMY : UNITS; const u=list[i];
+  openLesson({mode:'unit', listKey, u, idx:i, intro:u.concept, title:u.title, eyebrow:`${listKey==='academia'?'Academia del Broker':'Plataforma Pulppo'} · Unidad ${i+1}`, items:u.qs.map((q,k)=>({key:u.id+':'+k,q})), hearts: listKey==='academia'?3:null});
+}
+function startDaily(){
+  const pool=[]; ACADEMY.forEach(u=>u.qs.forEach((q,k)=>pool.push({key:u.id+':'+k,q})));
+  const pick=[]; const seen=new Set();
+  for(const it of shuffle(pool)){ const t=qType(it.q); if(pick.length<3 && !seen.has(t)){ pick.push(it); seen.add(t);} }
+  openLesson({mode:'daily', title:'Reto del día', items:pick, hearts:3});
+}
+function startReview(){
+  const items=S.mistakes.map(k=>({key:k,q:qByKey(k)})).filter(x=>x.q).slice(-8);
+  if(!items.length) return;
+  openLesson({mode:'review', title:'Repaso de errores', items, hearts:null});
+}
+function openLesson(cfg){
+  L=Object.assign({cfg, queue:cfg.items.map((_,k)=>k), pos:cfg.intro?-1:0, firstTry:{}, retried:{}, done:0, xp:0, combo:0, maxCombo:0}, cfg);
+  if(L.pos===0) prepQ();
+  $('lesson').hidden=false; document.body.style.overflow='hidden';
+  renderLesson();
+}
+function closeLesson(){ $('lesson').hidden=true; document.body.style.overflow=''; L=null; SIM=null; if(simCtl) simCtl.abort(); renderAll(); }
+function curItem(){ return L.items[L.queue[L.pos]]; }
+function prepQ(){
+  const q=curItem().q; L.sel=null; L.answered=false; L.ok=false; L.fx='';
+  if(qType(q)==='order'){ const idx=q.items.map((_,k)=>k); let p=shuffle(idx); if(p.every((v,k)=>v===k)) p.reverse(); L.ord={pool:p, picked:[]}; }
+  if(qType(q)==='match'){ const idx=q.pairs.map((_,k)=>k); L.mt={left:shuffle(idx), right:shuffle(idx), selL:null, done:[], bad:null, mistakes:0}; }
+  if(qType(q)==='calc'){ L.calcVal=''; }
+}
+function heartsHtml(){ if(L.hearts==null) return ''; let h=''; for(let i=0;i<3;i++) h+=`<span class="${i<L.hearts?'':'off'}">${ico('heart',1.8)}</span>`; return `<span class="hearts" aria-label="${L.hearts} vidas">${h}</span>`; }
+function qBody(q){
+  const t=qType(q);
+  const label = {mc:'Pregunta',sc:'¿Qué harías?',order:'Ordena',match:'Empareja',calc:'Calcula'}[t];
+  let h = `<span class="tag">${L.retried[L.queue[L.pos]]&&L.pos>=L.items.length?'Segundo intento · ':''}${label}</span><h2>${esc(q.q)}</h2>`;
+  if(t==='mc'||t==='sc'){
+    h += `<div class="opts" role="radiogroup">${q.o.map((o,k)=>{ let cls=''; if(L.answered){ if(k===q.a) cls='right'; else if(k===L.sel) cls='wrong'; } else if(k===L.sel) cls='sel';
+      return `<button class="opt ${cls}" role="radio" aria-checked="${k===L.sel}" data-k="${k}" ${L.answered?'disabled':''}><span class="k">${k+1}</span><span>${esc(o)}</span></button>`; }).join('')}</div>`;
+  } else if(t==='order'){
+    const {pool,picked}=L.ord;
+    h += `<div class="ord-answer">${picked.length? picked.map((k,pos)=>{ const cls = L.answered ? (k===pos?'right':'wrong') : ''; return `<button class="ord-row ${cls}" data-rm="${k}" ${L.answered?'disabled':''}><span class="k">${pos+1}</span><span>${esc(q.items[k])}</span></button>`; }).join('') : '<span class="cap">Toca los elementos de abajo en el orden correcto.</span>'}</div>
+    <div class="ord-pool">${pool.filter(k=>!picked.includes(k)).map(k=>`<button class="tok" data-add="${k}">${esc(q.items[k])}</button>`).join('')}</div>`;
+  } else if(t==='match'){
+    const m=L.mt;
+    const cell=(side,k,txt)=>{ const done=m.done.includes(k); const sel= side==='l' && m.selL===k; const bad = m.bad && ((side==='l'&&m.bad[0]===k)||(side==='r'&&m.bad[1]===k));
+      return `<button class="mt ${done?'done':''} ${sel?'sel':''} ${bad?'bad shake':''}" data-${side}="${k}" ${done||L.answered?'disabled':''}>${esc(txt)}</button>`; };
+    h += `<div class="match"><div class="col">${m.left.map(k=>cell('l',k,q.pairs[k][0])).join('')}</div><div class="col">${m.right.map(k=>cell('r',k,q.pairs[k][1])).join('')}</div></div><span class="cap">Toca un concepto y luego su pareja. ${m.mistakes?`Errores: ${m.mistakes}`:''}</span>`;
+  } else if(t==='calc'){
+    const cls = L.answered ? (L.ok?'right':'wrong') : '';
+    h += `<label class="calc ${cls}" for="calcIn">${q.pre?`<span class="u">${esc(q.pre)}</span>`:''}<input id="calcIn" inputmode="decimal" autocomplete="off" placeholder="0" value="${esc(L.calcVal)}" ${L.answered?'disabled':''} aria-label="Tu respuesta">${q.post?`<span class="u">${esc(q.post)}</span>`:''}</label><span class="cap">Escribe solo el número. Puedes usar comas y punto decimal.</span>`;
+  }
+  return h;
+}
+function canCheck(){
+  const q=curItem().q, t=qType(q);
+  if(t==='mc'||t==='sc') return L.sel!==null;
+  if(t==='order') return L.ord.picked.length===q.items.length;
+  if(t==='calc') return L.calcVal.trim()!=='' && !isNaN(parseNum(L.calcVal));
+  return false;
+}
+const parseNum = v => parseFloat(String(v).replace(/[^0-9.\-]/g,''));
+function feedback(q){
+  const t=qType(q);
+  if(L.ok){
+    const head = L.combo>=3 ? `Correcto · combo x${L.combo}` : 'Correcto';
+    return {head, text: t==='sc' ? q.fb[q.a] : q.e};
+  }
+  if(t==='mc') return {head:'La respuesta es: '+q.o[q.a], text:q.e};
+  if(t==='sc') return {head:'Mejor opción: '+q.o[q.a], text:q.fb[L.sel]};
+  if(t==='order') return {head:'Orden correcto: '+q.items.join(' → '), text:q.e};
+  if(t==='calc') return {head:'Respuesta: '+(q.pre||'')+fmtN(q.a)+(q.post||''), text:q.e};
+  if(t==='match') return {head:`Completado con ${L.mt.mistakes} error${L.mt.mistakes===1?'':'es'}`, text:q.e};
+}
+function renderLesson(){
+  if(SIM) return renderSim();
+  const el=$('lesson');
+  const pct = L.pos<0 ? 0 : Math.min(100, L.done/L.items.length*100);
+  let body='', foot='', footClass='';
+  if(L.failed){
+    body = `<div class="result"><span class="tag">Sin vidas</span><h1>Casi lo logras.</h1><p class="muted">Repasa las explicaciones e inténtalo de nuevo. Las preguntas que fallaste quedaron en Repasar errores.</p></div>`;
+    foot = `<button class="btn ghost" id="lDone">Salir</button><button class="btn" id="lRetry">Intentar de nuevo</button>`;
+  } else if(L.pos<0){
+    body = `<div class="concept"><span class="tag">${esc(L.eyebrow||'')}</span><h2>${esc(L.title)}</h2><div class="accent-line"></div><ul>${L.intro.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${L.hearts!=null?`<p class="cap">Tienes 3 vidas. Cada error cuesta una; encadena 3 respuestas correctas para ganar XP extra.</p>`:''}</div>`;
+    foot = `<span class="cap">${L.items.length} ejercicios · ~3 min</span><button class="btn" id="lNext">Empezar</button>`;
+  } else if(L.finished){
+    const total=L.items.length;
+    body = `<div class="result pop"><span class="tag">${esc(L.title)} · completado</span><h1>${L.firstCorrect===total?'Perfecto.':'Bien hecho.'}</h1>
+      <div class="statrow" style="width:100%"><div class="s"><span class="n">+${L.xp}</span><span class="cap">XP ganados</span></div><div class="s"><span class="n">${L.firstCorrect}/${total}</span><span class="cap">al primer intento</span></div><div class="s"><span class="n">x${L.maxCombo}</span><span class="cap">mejor combo</span></div>${L.hearts!=null?`<div class="s"><span class="n">${L.hearts}</span><span class="cap">vidas restantes</span></div>`:''}</div>
+      ${L.newBadge?`<div class="badge on big"><span class="b">${ico(L.u.icon)}</span><span><b>Insignia desbloqueada:</b> ${esc(L.u.badge)}</span></div>`:''}
+      ${L.dailyBonus?'<p><b>+15 XP</b> por completar el reto del día.</p>':''}</div>`;
+    foot = `<span></span><button class="btn" id="lDone">Continuar</button>`;
+  } else {
+    const q=curItem().q;
+    body = qBody(q);
+    if(!L.answered){
+      const t=qType(q);
+      foot = t==='match' ? `<span class="cap">Se revisa al unir todas las parejas.</span><span></span>` : `<span class="cap">${t==='mc'||t==='sc'?`Teclas 1–${q.o.length}`:t==='order'?'Toca un paso elegido para quitarlo':'Enter para comprobar'}</span><button class="btn" id="lCheck" ${canCheck()?'':'disabled'}>Comprobar</button>`;
+    } else {
+      const f=feedback(q); footClass = L.ok?'ok':'err';
+      foot = `<div class="fb"><b>${esc(f.head)}</b><span>${esc(f.text)}</span></div><button class="btn" id="lNext">Continuar</button>`;
+    }
+  }
+  el.innerHTML = `<div class="lhead"><button class="iconbtn" id="lClose" aria-label="Salir">${ico('x',2)}</button><div class="bar ok"><i style="width:${pct}%"></i></div>${L.combo>=2&&!L.finished?`<span class="combo">x${L.combo}</span>`:''}${heartsHtml()}</div><div class="lbody">${body}</div><div class="lfoot ${footClass}"><div class="in">${foot}</div></div>`;
+  $('lClose').onclick=closeLesson;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{ L.sel=+b.dataset.k; renderLesson(); });
+  el.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ L.ord.picked.push(+b.dataset.add); renderLesson(); });
+  el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ L.ord.picked=L.ord.picked.filter(k=>k!==+b.dataset.rm); renderLesson(); });
+  el.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{ L.mt.selL=+b.dataset.l; L.mt.bad=null; renderLesson(); });
+  el.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>matchPick(+b.dataset.r));
+  const ci=$('calcIn'); if(ci){ ci.oninput=()=>{ L.calcVal=ci.value; const c=$('lCheck'); if(c) c.disabled=!canCheck(); }; if(!L.answered) ci.focus({preventScroll:true}); }
+  if($('lCheck')) $('lCheck').onclick=check;
+  if($('lNext')) $('lNext').onclick=next;
+  if($('lDone')) $('lDone').onclick=closeLesson;
+  if($('lRetry')) $('lRetry').onclick=()=>openLesson(L.cfg);
+  if(!ci){ const f=el.querySelector('#lNext,#lDone,#lCheck:not([disabled])'); if(f) f.focus({preventScroll:true}); }
+}
+function matchPick(r){
+  const m=L.mt; if(m.selL===null) return;
+  if(m.selL===r){ m.done.push(r); m.selL=null; m.bad=null;
+    if(m.done.length===curItem().q.pairs.length){ grade(m.mistakes===0); return; } }
+  else { m.mistakes++; m.bad=[m.selL,r]; m.selL=null; setTimeout(()=>{ if(L&&L.mt===m){ m.bad=null; renderLesson(); } },600); }
+  renderLesson();
+}
+function check(){
+  if(!canCheck()) return;
+  const q=curItem().q, t=qType(q);
+  if(t==='mc'||t==='sc') grade(L.sel===q.a);
+  else if(t==='order') grade(L.ord.picked.every((v,k)=>v===k));
+  else if(t==='calc') grade(Math.abs(parseNum(L.calcVal)-q.a) <= (q.tol ?? 0.5));
+}
+function grade(ok){
+  const qi=L.queue[L.pos], it=L.items[qi];
+  L.answered=true; L.ok=ok;
+  const first = !(qi in L.firstTry);
+  if(first) L.firstTry[qi]=ok;
+  if(ok){
+    if(first){ L.combo++; L.maxCombo=Math.max(L.maxCombo,L.combo); L.xp += 10 + (L.combo>=3?2:0); }
+    L.done++;
+    if(L.mode==='review') S.mistakes=S.mistakes.filter(k=>k!==it.key);
+  } else {
+    L.combo=0;
+    if(L.mode!=='review' && !S.mistakes.includes(it.key)){ S.mistakes.push(it.key); if(S.mistakes.length>40) S.mistakes.shift(); }
+    if(L.hearts!=null) L.hearts=Math.max(0,L.hearts-1);
+    if(!L.retried[qi]){ L.retried[qi]=true; L.queue.push(qi); } else L.done++;
+  }
+  renderLesson();
+}
+function next(){
+  if(L.pos<0){ L.pos=0; prepQ(); renderLesson(); return; }
+  if(L.hearts===0){ L.failed=true; persist(); renderLesson(); return; }
+  L.pos++;
+  if(L.pos>=L.queue.length) finishLesson(); else prepQ();
+  renderLesson();
+}
+function finishLesson(){
+  L.finished=true;
+  L.firstCorrect = Object.values(L.firstTry).filter(Boolean).length;
+  let gain=L.xp;
+  if(L.firstCorrect===L.items.length && L.mode==='unit') gain+=5;
+  if(L.mode==='unit'){
+    const store = L.listKey==='academia' ? S.academy : S.lessons;
+    const prev = store[L.u.id];
+    if(prev) gain=Math.ceil(gain/2);
+    store[L.u.id] = {best:Math.max(prev?.best||0, L.firstCorrect), at:Date.now(), tries:(prev?.tries||0)+1};
+    L.newBadge = L.listKey==='academia' && !prev;
+  }
+  if(L.mode==='daily' && S.dailyDone!==today()){ gain+=15; S.dailyDone=today(); L.dailyBonus=true; }
+  L.xp=gain; addXp(gain); persist(); celebrate();
+}
+document.addEventListener('keydown',e=>{
+  if($('lesson').hidden || SIM || !L) return;
+  if(e.key==='Escape'){ closeLesson(); return; }
+  if(L.pos<0 || L.failed || L.finished) return;
+  const q=curItem().q, t=qType(q);
+  if(!L.answered && (t==='mc'||t==='sc')){ const n=parseInt(e.key,10); if(n>=1&&n<=q.o.length){ L.sel=n-1; renderLesson(); return; } }
+  if(e.key==='Enter'){
+    if(e.target && e.target.tagName==='BUTTON' && e.target.id!=='calcIn') return;
+    e.preventDefault(); if(L.answered) next(); else check();
+  }
+});
+
+/* ---- Celebración ---- */
+function celebrate(){
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c=document.createElement('canvas'); c.id='confetti'; document.body.appendChild(c);
+  const dpr=window.devicePixelRatio||1; c.width=innerWidth*dpr; c.height=innerHeight*dpr; const x=c.getContext('2d'); x.scale(dpr,dpr);
+  const cols=['#F6BE00','#529999','#212322','#B7B7B7'];
+  const ps=Array.from({length:110},()=>({x:innerWidth/2+(Math.random()-.5)*120, y:innerHeight*0.45, vx:(Math.random()-.5)*11, vy:-Math.random()*12-4, r:Math.random()*6+4, c:cols[Math.floor(Math.random()*cols.length)], a:Math.random()*6, va:(Math.random()-.5)*.3}));
+  const t0=performance.now();
+  (function f(t){ const dt=t-t0; x.clearRect(0,0,innerWidth,innerHeight);
+    ps.forEach(p=>{ p.vy+=0.35; p.x+=p.vx; p.y+=p.vy; p.a+=p.va; x.save(); x.translate(p.x,p.y); x.rotate(p.a); x.globalAlpha=Math.max(0,1-dt/1800); x.fillStyle=p.c; x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2); x.restore(); });
+    if(dt<1800) requestAnimationFrame(f); else c.remove(); })(t0);
+}
+
+/* ---- Simulador de clientes ---- */
+let simCtl=null;
+function openSimPicker(){
+  if(!sample) return;
+  L=null; SIM={pick:true};
+  $('lesson').hidden=false; document.body.style.overflow='hidden';
+  renderSim();
+}
+function renderSim(){
+  const el=$('lesson'); let body='', foot='';
+  if(SIM.pick){
+    body = `<div class="section-head"><span class="tag">Simulador de clientes</span><h2>Elige a tu cliente</h2><p class="muted">Claude interpreta al cliente por chat. Negocia como lo harías por WhatsApp y al final recibe una calificación con consejos. Gana hasta 20 XP.</p></div>
+    <div class="simlist">${SIMS.map((s,i)=>`<button class="acard" data-sim="${i}"><span class="tag">${esc(s.who)}${S.sims?.[s.id]!=null?` · mejor ${S.sims[s.id]}/100`:''}</span><h3>${esc(s.title)}</h3><span class="muted">${esc(s.setup)}</span><span class="cap"><b>Objetivo:</b> ${esc(s.goal)}</span></button>`).join('')}</div>`;
+    foot = `<span class="cap">Usa tu cuenta de Claude.</span><button class="btn ghost" id="sClose2">Salir</button>`;
+  } else if(SIM.result){
+    const r=SIM.result;
+    body = `<div class="result pop"><span class="tag">${esc(SIM.s.title)} · resultado</span><h1>${r.score}/100</h1><p>${r.logro?'Lograste el objetivo.':'Aún no se logró el objetivo. Inténtalo de nuevo con otro enfoque.'} <b>+${SIM.gain} XP</b></p>
+      <div class="grid2" style="width:100%"><div class="card"><span class="tag">Lo que hiciste bien</span><ul class="plain">${(r.fortalezas||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="card"><span class="tag">Para mejorar</span><ul class="plain">${(r.mejorar||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>
+      ${r.frase_modelo?`<p class="why"><b>Frase modelo:</b> “${esc(r.frase_modelo)}”</p>`:''}</div>`;
+    foot = `<button class="btn ghost" id="sPick">Otro cliente</button><button class="btn" id="sAgain">Intentar de nuevo</button>`;
+  } else {
+    const s=SIM.s; const nUser=SIM.turns.filter(t=>t.role==='user').length;
+    body = `<div class="card simsetup"><span class="tag">${esc(s.who)} · ${esc(s.title)}</span><p>${esc(s.setup)}</p><p class="cap"><b>Tu objetivo:</b> ${esc(s.goal)}</p></div>
+      <div class="msgs sim" id="simMsgs"><div class="msg bot">${esc(s.opener)}</div>${SIM.turns.map(t=>`<div class="msg ${t.role==='user'?'me':'bot'}">${esc(t.content)}</div>`).join('')}${SIM.busy?`<div class="msg bot" id="simLive">${esc(SIM.live||'Escribiendo…')}</div>`:''}</div>
+      ${SIM.err?`<p class="cap" style="color:var(--err)">${esc(SIM.err)}</p>`:''}`;
+    foot = `<form class="composer" id="simForm" style="flex:1 1 100%"><input id="simIn" placeholder="Tu respuesta al cliente" autocomplete="off" aria-label="Tu respuesta" ${SIM.busy||SIM.grading?'disabled':''}><button class="btn" ${SIM.busy||SIM.grading?'disabled':''}>Enviar</button></form>
+      <span class="cap">${nUser<3?`Envía al menos ${3-nUser} mensaje${3-nUser===1?'':'s'} más para calificar.`:'Cuando cierres la conversación, pide tu calificación.'}</span><button class="btn yellow" id="sGrade" ${nUser<3||SIM.busy||SIM.grading?'disabled':''}>${SIM.grading?'Calificando…':'Terminar y calificar'}</button>`;
+  }
+  el.innerHTML = `<div class="lhead"><button class="iconbtn" id="lClose" aria-label="Salir">${ico('x',2)}</button><span class="tag" style="flex:1">Simulador de clientes</span></div><div class="lbody">${body}</div><div class="lfoot"><div class="in">${foot}</div></div>`;
+  $('lClose').onclick=closeLesson;
+  if($('sClose2')) $('sClose2').onclick=closeLesson;
+  el.querySelectorAll('[data-sim]').forEach(b=>b.onclick=()=>{ SIM={s:SIMS[+b.dataset.sim], turns:[]}; renderSim(); });
+  if($('sPick')) $('sPick').onclick=()=>{ SIM={pick:true}; renderSim(); };
+  if($('sAgain')) $('sAgain').onclick=()=>{ SIM={s:SIM.s, turns:[]}; renderSim(); };
+  if($('simForm')) $('simForm').onsubmit=e=>{ e.preventDefault(); simSend(); };
+  if($('sGrade')) $('sGrade').onclick=simGrade;
+  const m=$('simMsgs'); if(m) m.scrollTop=m.scrollHeight;
+  const si=$('simIn'); if(si && !si.disabled) si.focus({preventScroll:true});
+}
+async function simSend(){
+  const inp=$('simIn'); const txt=inp.value.trim(); if(!txt||SIM.busy) return;
+  const s=SIM.s; SIM.turns.push({role:'user',content:txt}); SIM.busy=true; SIM.live=''; SIM.err=''; renderSim();
+  const rules = `${s.persona}\n\nEstás en una conversación por WhatsApp con un asesor inmobiliario en México. Tu primer mensaje fue: "${s.opener}". Responde SOLO como este personaje, en español de México, natural y breve (máximo 60 palabras). No des consejos al asesor ni salgas del personaje. Si el asesor te escucha, pregunta y usa datos, cede poco a poco; si te presiona o no te escucha, resístete más. Sin emojis.`;
+  simCtl=new AbortController();
+  try{
+    const turns=SIM.turns.slice(-16); if(turns[0].role!=='user') turns.shift();
+    const {text}=await sample([{role:'user',content:rules},...turns],{cache:false,modelTier:'quick',signal:simCtl.signal,onText:({text})=>{ SIM.live=text; const l=$('simLive'); if(l) l.textContent=text; }});
+    if(!SIM) return;
+    SIM.turns.push({role:'assistant',content:text});
+  }catch(e){
+    if(!SIM) return;
+    if(e&&e.text){ SIM.turns.push({role:'assistant',content:e.text}); } else { SIM.turns.pop(); SIM.err=aiErr(e)||''; }
+  }
+  SIM.busy=false; renderSim();
+}
+async function simGrade(){
+  const s=SIM.s; SIM.grading=true; renderSim();
+  const transcript = `CLIENTE: ${s.opener}\n` + SIM.turns.map(t=>(t.role==='user'?'ASESOR: ':'CLIENTE: ')+t.content).join('\n');
+  try{
+    const r = await sample.json(`Evalúa a un asesor inmobiliario en México en un juego de rol de negociación por WhatsApp.\nEscenario: ${s.setup}\nObjetivo del asesor: ${s.goal}\n\nTranscripción:\n${transcript}\n\nCalifica de 0 a 100 cómo manejó la conversación: escucha, preguntas, uso de datos, manejo de la objeción, propuesta de siguiente paso y tono profesional. Sé justo y exigente. Responde solo con JSON en español de México con esta forma: {"score": 0-100, "logro": true|false, "fortalezas": ["frase corta", "frase corta"], "mejorar": ["consejo concreto", "consejo concreto"], "frase_modelo": "una frase que el asesor pudo haber dicho"}`,{cache:false});
+    if(!SIM) return;
+    const score=Math.max(0,Math.min(100,Math.round(Number(r.score)||0)));
+    r.score=score; r.fortalezas=[].concat(r.fortalezas||[]).map(String).slice(0,3); r.mejorar=[].concat(r.mejorar||[]).map(String).slice(0,3); r.frase_modelo=r.frase_modelo?String(r.frase_modelo):'';
+    SIM.gain = 10 + Math.round(score/10);
+    S.sims = S.sims||{}; S.sims[s.id]=Math.max(S.sims[s.id]||0, score);
+    addXp(SIM.gain); persist();
+    SIM.result=r; SIM.grading=false; renderSim(); if(score>=70) celebrate();
+  }catch(e){ if(!SIM) return; SIM.grading=false; SIM.err=aiErr(e)||'No se pudo calificar. Intenta de nuevo.'; renderSim(); }
+}
+
+/* =========================== PRIMEROS PASOS =========================== */
+function renderGuide(){
+  const v=$('view-guide');
+  const done=GUIDE.filter(x=>S.guide[x.id]).length;
+  const nextIdx=GUIDE.findIndex(x=>!S.guide[x.id]);
+  v.innerHTML = `<div class="section-head"><span class="tag">Primeros pasos · ${done} de ${GUIDE.length}</span><h2>Tu primer día en Pulppo</h2><p class="muted">Sigue estos pasos en orden la primera vez que entras a la plataforma. Marca cada uno cuando lo termines (+5 XP).</p><div class="bar ok" style="max-width:360px"><i style="width:${done/GUIDE.length*100}%"></i></div></div>
+  <div class="steps">${GUIDE.map((g,i)=>{ const d=!!S.guide[g.id];
+    return `<div class="step ${d?'is-done':''} ${i===nextIdx?'next':''}"><div class="num">${d?ico('check',2).replace('<svg','<svg width="18" height="18"'):i+1}</div><div class="body"><h3>${esc(g.title)}</h3><span class="where">${esc(g.where)}</span><p>${esc(g.body)}</p><div class="actions"><button class="btn small ${d?'ghost':''}" data-g="${g.id}">${d?'Marcar como pendiente':'Listo, ya lo hice'}</button>${g.link?`<a class="linkbtn" href="${g.link.u}" target="_blank" rel="noopener">${esc(g.link.t)}</a>`:''}</div></div></div>`; }).join('')}</div>
+  <div class="card"><span class="tag">¿Te atoraste?</span><p style="margin-top:6px">Escribe en el canal de ayuda de Pulppo o pregúntale a tu KAM. En la pestaña Noticias también puedes preguntarle al asistente.</p></div>`;
+  v.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.g;
+    if(S.guide[id]) delete S.guide[id]; else { S.guide[id]=Date.now(); addXp(5); toast('+5 XP'); }
+    persist(); renderAll();
+  });
+}
+
+/* =========================== TAREAS =========================== */
+function renderTasks(){
+  const v=$('view-tasks');
+  const wk=S.weekly[WEEK]||{};
+  const oDone=TASKS_ONCE.filter(x=>S.tasks[x.id]).length, wDone=TASKS_WEEK.filter(x=>wk[x.id]).length;
+  v.innerHTML = `<div class="section-head"><span class="tag">Tareas del asesor</span><h2>Lo que debes cumplir</h2><p class="muted">Tu líder ve este avance en su panel. Los hábitos semanales se reinician cada lunes.</p></div>
+  <div class="grid2">
+   <div class="card"><span class="tag">Onboarding</span><div style="display:flex;align-items:baseline;gap:8px;margin:6px 0 10px"><span style="font-family:var(--display);font-size:37px">${oDone}/${TASKS_ONCE.length}</span><span class="cap">una sola vez · +15 XP c/u</span></div><div class="bar ok"><i style="width:${oDone/TASKS_ONCE.length*100}%"></i></div></div>
+   <div class="card"><span class="tag">Esta semana · ${WEEK.split('-W')[1]}</span><div style="display:flex;align-items:baseline;gap:8px;margin:6px 0 10px"><span style="font-family:var(--display);font-size:37px">${wDone}/${TASKS_WEEK.length}</span><span class="cap">hábitos · +5 XP c/u</span></div><div class="bar"><i style="width:${wDone/TASKS_WEEK.length*100}%"></i></div></div>
+  </div>
+  <div><h3 style="margin-bottom:8px">Hábitos de esta semana</h3><div class="checklist">${TASKS_WEEK.map(t=>row(t,!!wk[t.id],'w',5)).join('')}</div></div>
+  <div><h3 style="margin-bottom:8px">Onboarding</h3><div class="checklist">${TASKS_ONCE.map(t=>row(t,!!S.tasks[t.id],'o',15)).join('')}</div></div>`;
+  function row(t,d,kind,xp){ return `<label class="check ${d?'is-done':''}"><input type="checkbox" id="c-${t.id}" data-k="${kind}" data-id="${t.id}" ${d?'checked':''}><span class="t"><b>${esc(t.t)}</b>${t.d?`<span class="muted">${esc(t.d)}</span>`:''}${t.link?`<a class="linkbtn" href="${t.link.u}" target="_blank" rel="noopener">${esc(t.link.t)}</a>`:''}</span><span class="xp">+${xp} XP</span></label>`; }
+  v.querySelectorAll('input[type=checkbox]').forEach(c=>c.onchange=()=>{
+    const id=c.dataset.id;
+    if(c.dataset.k==='o'){ if(c.checked){ S.tasks[id]=Date.now(); addXp(15); toast('+15 XP'); } else delete S.tasks[id]; }
+    else { S.weekly[WEEK]=S.weekly[WEEK]||{}; if(c.checked){ S.weekly[WEEK][id]=Date.now(); addXp(5); toast('+5 XP'); } else delete S.weekly[WEEK][id];
+      // conserva solo las últimas 8 semanas
+      const ks=Object.keys(S.weekly).sort(); while(ks.length>8){ delete S.weekly[ks.shift()]; } }
+    persist(); renderAll();
+  });
+}
+
+/* =========================== NOTICIAS + ASISTENTE =========================== */
+let chatTurns=[]; let chatCtl=null;
+const PULPPO_FACTS = UNITS.map(u=>u.title+': '+u.concept.join(' ')).join('\n');
+function newsContext(){
+  if(!news?.items?.length) return 'No hay noticias cargadas esta semana.';
+  return news.items.map((n,i)=>`${i+1}. ${n.title} (${n.date}, ${n.source}): ${n.summary} Qué significa para el asesor: ${n.why}`).join('\n');
+}
+function renderNews(){
+  const v=$('view-news');
+  const items=news?.items||[];
+  const upd = news?.updatedAt ? new Date(news.updatedAt).toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}) : '';
+  v.innerHTML = `<div class="section-head"><span class="tag">Noticias · ${esc(news?.week||'Esta semana')}</span><h2>Las 5 noticias que un broker debe saber</h2><p class="muted">Seleccionadas y resumidas por el agente de noticias de Pulppo${upd?' · actualizado el '+esc(upd):''}. Cada una trae qué significa para tu trabajo.</p></div>
+  ${items.length? `<div class="news">${items.map((n,i)=>`<article class="newsitem"><span class="rank">${i+1}</span><div class="body"><span class="tag">${esc(n.topic||'Mercado')} · ${esc(n.date||'')}</span><h3>${esc(n.title)}</h3><p>${esc(n.summary)}</p><p class="why"><b>Para ti:</b> ${esc(n.why)}</p><div class="actions" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">${n.url?`<a class="linkbtn" href="${esc(n.url)}" target="_blank" rel="noopener">Fuente: ${esc(n.source||'ver nota')}</a>`:''}<button class="linkbtn ai-only" data-explain="${i}" hidden>Redáctalo para mi cliente</button></div><div class="explain-out" id="ex-${i}" hidden></div></div></article>`).join('')}</div>` : `<div class="empty"><h3>Aún no hay noticias esta semana</h3><p class="muted" style="margin-top:6px">El agente publica la edición cada lunes por la mañana.</p></div>`}
+  <div class="card chat ai-only" hidden>
+    <span class="tag">Asistente Pulppo</span>
+    <h3>Pregunta sobre las noticias o la plataforma</h3>
+    <div class="msgs" id="msgs" aria-live="polite">${chatTurns.map(t=>`<div class="msg ${t.role==='user'?'me':'bot'}">${esc(t.content)}</div>`).join('')}</div>
+    <div class="chips" id="chips">${['¿Cómo afecta la tasa de Banxico a mis clientes?','¿Qué le digo a un cliente con Infonavit?','¿Cómo subo mi primera propiedad?'].map(c=>`<button class="chip" data-q="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+    <form class="composer" id="chatForm"><input id="chatIn" placeholder="Escribe tu pregunta" autocomplete="off" aria-label="Tu pregunta"><button class="btn" id="chatSend">Enviar</button></form>
+    <span class="cap">Las respuestas usan tu cuenta de Claude. Verifica cifras antes de enviarlas a un cliente.</span>
+  </div>`;
+  const aiOn = !!sample;
+  v.querySelectorAll('.ai-only').forEach(e=>e.hidden=!aiOn);
+  if(!aiOn) return;
+  v.querySelectorAll('[data-explain]').forEach(b=>b.onclick=()=>explain(+b.dataset.explain,b));
+  v.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{ $('chatIn').value=b.dataset.q; ask(); });
+  $('chatForm').onsubmit=e=>{ e.preventDefault(); ask(); };
+  const m=$('msgs'); m.scrollTop=m.scrollHeight;
+}
+function aiErr(e){
+  const c=e&&e.code;
+  if(c==='not_granted'||c==='sampling_disabled'||c==='not_declared'||c==='capability_disabled'||c==='capability_removed'){ sample=null; renderNews(); return 'El asistente no está disponible en esta vista.'; }
+  if(c==='rate_limited') return 'Demasiadas preguntas seguidas. Intenta en unos minutos.';
+  if(c==='session_expired') return 'Tu sesión expiró. Vuelve a iniciar sesión en Claude.';
+  if(c==='cancelled') return '';
+  return 'No se pudo obtener respuesta. Intenta de nuevo.';
+}
+async function explain(i,btn){
+  const n=news.items[i]; const out=$('ex-'+i);
+  out.hidden=false; out.textContent='Pensando…'; btn.disabled=true;
+  try{
+    const {text}=await sample(`Eres asesor inmobiliario en México. Redacta un mensaje de WhatsApp breve (máximo 90 palabras), cordial y en español de México, para compartir con un cliente comprador o propietario esta noticia y por qué le conviene saberla. No inventes cifras: usa solo las de la noticia. Sin emojis. Sin saludo con nombre (usa "Hola").\n\nNoticia: ${n.title}. ${n.summary}\nContexto para el asesor: ${n.why}`,{modelTier:'quick',cache:{gcTime:86400000},onText:({text})=>{out.textContent=text;}});
+    out.textContent=text;
+  }catch(e){ out.textContent=(e&&e.text)||aiErr(e); }
+  btn.disabled=false;
+}
+async function ask(){
+  const inp=$('chatIn'); const q=inp.value.trim(); if(!q||!sample) return;
+  inp.value=''; chatTurns.push({role:'user',content:q}); if(chatTurns.length>12) chatTurns=chatTurns.slice(-12);
+  if(chatTurns[0].role!=='user') chatTurns.shift();
+  renderNews();
+  const m=$('msgs'); const bubble=document.createElement('div'); bubble.className='msg bot'; bubble.textContent='Pensando…'; m.appendChild(bubble); m.scrollTop=m.scrollHeight;
+  $('chatSend').disabled=true;
+  chatCtl=new AbortController();
+  const rules = `Eres el Asistente Pulppo, que ayuda a asesores inmobiliarios en México que están empezando en la plataforma Pulppo. Responde en español de México, en 120 palabras o menos, directo y práctico. Usa solo la información de abajo y conocimiento general del mercado inmobiliario mexicano. Si no sabes algo específico de la plataforma, dilo y sugiere preguntar al canal de ayuda o a su KAM. No inventes cifras. Sin emojis. Usa "asesores" o "brokers", nunca "agentes".\n\nNOTICIAS DE LA SEMANA:\n${newsContext()}\n\nCONOCIMIENTO DE LA PLATAFORMA:\n${PULPPO_FACTS}`;
+  try{
+    const {text}=await sample([{role:'user',content:rules},...chatTurns],{cache:false,signal:chatCtl.signal,onText:({text})=>{bubble.textContent=text; m.scrollTop=m.scrollHeight;}});
+    chatTurns.push({role:'assistant',content:text});
+  }catch(e){
+    const keep=e&&e.text; const msg=aiErr(e);
+    if(keep){ bubble.textContent=keep; chatTurns.push({role:'assistant',content:keep}); } else bubble.textContent=msg||'Detenido.';
+  }
+  if($('chatSend')) $('chatSend').disabled=false;
+}
+
+/* =========================== RANKING / PANEL LÍDER =========================== */
+let profs={};
+async function renderTeam(){
+  const v=$('view-team');
+  if(!db){ v.innerHTML=`<div class="section-head"><span class="tag">Ranking</span><h2>Ranking del equipo</h2></div><div class="empty"><p>El ranking y el panel del líder se activan cuando abres la página desde claude.ai con tu cuenta del equipo.</p></div>`; return; }
+  const rows = team.map(d=>({id:d.id, ...d.data()})).filter(r=>r && typeof r.xp==='number');
+  const ids = rows.map(r=>r.id);
+  if(userNs && ids.length){ try{ profs = await userNs.profiles(ids); }catch(e){} }
+  const nameOf = id => (profs[id]&&profs[id].name) || (id===uid?'Tú':'Asesor');
+  const avatarOf = id => profs[id]?.avatarUrl || '';
+  const byXp=[...rows].sort((a,b)=>b.xp-a.xp);
+  let html = `<div class="section-head"><span class="tag">Ranking · ${rows.length} asesores</span><h2>Ranking del equipo</h2><p class="muted">Ordenado por XP total. Suma XP con lecciones, primeros pasos y tareas.</p></div>`;
+  html += byXp.length ? `<div class="rank-list">${byXp.slice(0,15).map((r,i)=>`<div class="rank-row ${r.id===uid?'me':''}"><span class="pos">${i+1}</span><span class="who">${avatarOf(r.id)?`<img src="${esc(avatarOf(r.id))}" alt="">`:''}<span><b class="nm" data-id="${esc(r.id)}"></b>${r.inmo?` <span class="cap">· ${esc(r.inmo)}</span>`:''}</span></span><span class="xp" style="font-size:14px">${r.xp.toLocaleString('es-MX')} XP</span></div>`).join('')}</div>` : `<div class="empty"><p>Nadie ha sumado XP todavía. Completa tu primera lección y aparece aquí.</p></div>`;
+
+  html += `<div class="card" style="display:flex;flex-direction:column;gap:10px"><span class="tag">Tu inmobiliaria</span><div class="field composer"><input id="inmoIn" placeholder="Ej. Inmobiliaria Norte" value="${esc(S.inmo)}" aria-label="Tu inmobiliaria"><button class="btn small" id="inmoSave">Guardar</button></div><span class="cap">Ayuda a tu líder a identificarte en el panel.</span></div>`;
+
+  if(isOwner){
+    const n=rows.length||1;
+    const guideAvg = Math.round(rows.reduce((s,r)=>s+GUIDE.filter(g=>r.guide?.[g.id]).length/GUIDE.length,0)/n*100);
+    const lessonsTot = rows.reduce((s,r)=>s+Object.keys(r.lessons||{}).length,0);
+    const active7 = rows.filter(r=>r.updatedAt && Date.now()-r.updatedAt < 7*864e5).length;
+    const stuck = rows.filter(r=>!r.updatedAt || Date.now()-r.updatedAt >= 7*864e5).length;
+    html += `<div class="section-head" style="margin-top:16px"><span class="tag">Panel del líder · solo tú lo ves</span><h2>Seguimiento de onboarding</h2><p class="muted">Avance de cada asesor en lecciones, primeros pasos y tareas. Se actualiza en vivo.</p></div>
+    <div class="statrow"><div class="s"><span class="n">${active7}</span><span class="cap">activos en 7 días</span></div><div class="s"><span class="n">${guideAvg}%</span><span class="cap">primeros pasos, promedio</span></div><div class="s"><span class="n">${lessonsTot}</span><span class="cap">lecciones completadas</span></div><div class="s"><span class="n" style="color:${stuck?'var(--err)':'inherit'}">${stuck}</span><span class="cap">sin actividad en 7 días</span></div></div>
+    <div class="table-wrap"><table><thead><tr><th>Asesor</th><th>Inmobiliaria</th><th class="num">XP</th><th>Lecciones</th><th>Primeros pasos</th><th>Onboarding</th><th>Semana</th><th>Academia</th><th class="num">Racha</th><th>Última actividad</th></tr></thead><tbody>
+    ${[...rows].sort((a,b)=>pathPct(a)-pathPct(b)).map(r=>{
+      const l=UNITS.filter(u=>r.lessons?.[u.id]).length, g=GUIDE.filter(x=>r.guide?.[x.id]).length, t=TASKS_ONCE.filter(x=>r.tasks?.[x.id]).length, w=TASKS_WEEK.filter(x=>r.weekly?.[WEEK]?.[x.id]).length;
+      const days = r.updatedAt ? Math.floor((Date.now()-r.updatedAt)/864e5) : null;
+      const last = days===null?'—': days===0?'Hoy': days===1?'Ayer': `Hace ${days} días`;
+      const mb=(a,b)=>`<div class="minibar"><div class="bar ok"><i style="width:${a/b*100}%"></i></div><span>${a}/${b}</span></div>`;
+      return `<tr><td><span class="who">${avatarOf(r.id)?`<img src="${esc(avatarOf(r.id))}" alt="">`:''}<b class="nm" data-id="${esc(r.id)}"></b></span></td><td>${esc(r.inmo||'—')}</td><td class="num">${r.xp}</td><td>${mb(l,UNITS.length)}</td><td>${mb(g,GUIDE.length)}</td><td>${mb(t,TASKS_ONCE.length)}</td><td>${mb(w,TASKS_WEEK.length)}</td><td>${mb(ACADEMY.filter(u=>r.academy?.[u.id]).length,ACADEMY.length)}</td><td class="num">${streakNow(r)}</td><td>${days!==null&&days>=7?`<span class="pill err">${last}</span>`:last}</td></tr>`;}).join('')}
+    </tbody></table></div>`;
+  }
+  v.innerHTML = html;
+  v.querySelectorAll('.nm').forEach(el=>el.textContent=nameOf(el.dataset.id));
+  $('inmoSave').onclick=()=>{ S.inmo=$('inmoIn').value.trim().slice(0,80); persist(); toast('Guardado'); };
+}
+
+/* =========================== NAV / RENDER =========================== */
+let current='learn';
+function show(view){
+  current=view;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.view===view)));
+  document.querySelectorAll('.view').forEach(s=>s.hidden = s.id!=='view-'+view);
+  try{ localStorage.setItem(LS_KEY+'-tab', view); }catch(e){}
+  renderView();
+}
+function renderView(){
+  ({learn:renderLearn, guide:renderGuide, tasks:renderTasks, news:renderNews, team:renderTeam})[current]();
+}
+function renderAll(){ renderHud(); if(!L) renderView(); }
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+
+/* =========================== ARRANQUE =========================== */
+loadLocal();
+try{ const t=localStorage.getItem(LS_KEY+'-tab'); if(t && $('view-'+t)) current=t; }catch(e){}
+show(current); renderHud();
+
+(async function boot(){
+  if(!window.claude || !claude.use) return;
+  const [dbNs, uNs, sNs] = await Promise.all([claude.use('db'), claude.use('user'), claude.use('sample')]);
+  sample = sNs; userNs = uNs;
+  if(uNs){
+    uid = await uNs.id(); isOwner = await uNs.isOwner();
+    const me = await uNs.me(); if(me.name) $('greet').textContent = `Hola, ${me.name.split(' ')[0]}. Aprende la plataforma y el oficio en lecciones de 3 minutos.`;
+    $('tab-team').firstChild.textContent = isOwner ? 'Equipo ' : 'Ranking ';
+    if(isOwner && current==='learn') renderLearn();
+  }
+  if(current==='news') renderNews();
+  if(!dbNs) { renderAll(); return; }
+  db = dbNs;
+  db.doc('news/current').onSnapshot(s=>{ news = s.exists ? s.data() : null; if(current==='news') renderNews(); }, ()=>{});
+  if(uid){
+    try{
+      const snap = await db.doc('progress/'+uid).get();
+      if(snap.exists){
+        const remote = Object.assign(fresh(), snap.data());
+        // conserva lo más reciente entre navegador y nube
+        if((S.updatedAt||0) > (remote.updatedAt||0)) { loadedRemote=true; persist(); }
+        else { S = remote; saveLocal(); loadedRemote=true; }
+      } else { loadedRemote=true; if(S.xp>0 || Object.keys(S.guide).length) persist(); }
+      setSync('Progreso sincronizado con tu equipo.');
+    }catch(e){ setSync('Sin conexión al equipo; tu progreso se guarda en este navegador.'); }
+  }
+  db.collection('progress').onSnapshot(s=>{ team = s.docs.filter(d=>d.exists); if(current==='team') renderTeam(); }, ()=>{});
+  renderAll();
+})();
+</script>
